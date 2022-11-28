@@ -3,17 +3,32 @@
 //
 
 import AoCTools
+import Foundation
 
 @main
 struct AdventOfCode {
-    enum Day {
-        case all
-        case day(Int)
-    }
+    // assign to eg `.day(5)`, leave as nil to run the puzzle for the current calendar day
+    static var defaultDay: Day? // = .day(1)
 
     static func main() {
-        run(.day(1))
+        var day = defaultDay ?? today
+
+        if CommandLine.argc > 1 {
+            let arg = CommandLine.arguments[1]
+            if let d = Int(arg), 1...25 ~= d {
+                day = .day(d)
+            } else if arg == "all" {
+                day = .all
+            }
+        }
+        
+        run(day)
         Timer.showTotal()
+    }
+
+    static var today: Day {
+        let today = Calendar.current.component(.day, from: Date())
+        return 1...25 ~= today ? .day(today) : .day(1)
     }
 
     private static func run(_ day: Day) {
@@ -25,6 +40,11 @@ struct AdventOfCode {
         case .day(let day):
             days[day-1].init(rawInput: nil).run()
         }
+    }
+
+    enum Day {
+        case all
+        case day(Int)
     }
 
     private static let days: [Runnable.Type] = [
