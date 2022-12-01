@@ -7,25 +7,25 @@
 import AoCTools
 
 final class Day01: AOCDay {
-    let elves: [[Int]]
+    let calories: [[Int]]
 
     init(rawInput: String? = nil) {
         let input = rawInput ?? Self.rawInput
 
         let sections = input.components(separatedBy: "\n\n")
-        self.elves = sections.map {
+        self.calories = sections.map {
             $0.lines.map { Int($0)! }
         }
     }
 
     func part1() -> Int {
-        elves
+        calories
             .map { $0.reduce(0, +) }
             .max()!
     }
 
     func part2() -> Int {
-        elves
+        calories
             .map { $0.reduce(0, +) }
             .sorted(by: >)
             .prefix(3)
