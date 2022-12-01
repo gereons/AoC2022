@@ -5,6 +5,7 @@ DAY=$1
 
 if [ -z "$DAY" ]; then
     DAY=$(date +%d)
+    DAY=$(printf "%d" $DAY)
 fi
 
 echo "getting puzzle input for day $DAY"

@@ -3,12 +3,42 @@ import XCTest
 
 final class Day01Tests: XCTestCase {
     func testDay01_1() throws {
-        let day = Day01(rawInput: "foo")
-        XCTAssertEqual(day.part1(), 0)
+        let day = Day01(rawInput: """
+1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000
+""")
+        XCTAssertEqual(day.part1(), 24000)
     }
 
     func testDay01_2() throws {
-        let day = Day01(rawInput: "bar")
-        XCTAssertEqual(day.part2(), 0)
+        let day = Day01(rawInput: """
+1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000
+""")
+        XCTAssertEqual(day.part2(), 45000)
     }
 }
