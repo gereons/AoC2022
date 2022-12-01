@@ -8,42 +8,27 @@ import AoCTools
 
 final class Day01: AOCDay {
     let elves: [[Int]]
+
     init(rawInput: String? = nil) {
         let input = rawInput ?? Self.rawInput
 
-        var elves = [[Int]]()
-        var current = [Int]()
-        for line in input.lines {
-            if line.isEmpty {
-                elves.append(current)
-                current = []
-            } else {
-                current.append(Int(line)!)
-            }
+        let sections = input.components(separatedBy: "\n\n")
+        self.elves = sections.map {
+            $0.lines.map { Int($0)! }
         }
-
-        if !current.isEmpty {
-            elves.append(current)
-        }
-        self.elves = elves
     }
 
     func part1() -> Int {
-        var maxCal = 0
-        for elf in elves {
-            let calories = elf.reduce(0, +)
-            maxCal = max(calories, maxCal)
-        }
-        return maxCal
+        elves
+            .map { $0.reduce(0, +) }
+            .max()!
     }
 
     func part2() -> Int {
-        var totals = [Int]()
-        for elf in elves {
-            let calories = elf.reduce(0, +)
-            totals.append(calories)
-        }
-        totals.sort(by: >)
-        return totals.prefix(3).reduce(0, +)
+        elves
+            .map { $0.reduce(0, +) }
+            .sorted(by: >)
+            .prefix(3)
+            .reduce(0, +)
     }
 }
