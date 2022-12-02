@@ -16,7 +16,7 @@ if [ -z "$AOC_SESSION" ]; then
     exit 1
 fi
 
-echo "getting puzzle input for day $DAY"
+echo "getting puzzle input for $YR day $DAY"
 
 D2=$(printf "%02d" $DAY)
 

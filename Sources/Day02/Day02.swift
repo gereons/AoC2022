@@ -1,7 +1,7 @@
 //
 // Advent of Code 2022
 //
-// https://adventofcode.com/2022/day/3
+// https://adventofcode.com/2022/day/2
 //
 
 import AoCTools
@@ -23,6 +23,26 @@ private enum Shape {
         case .rock: return 1
         case .paper: return 2
         case .scissors: return 3
+        }
+    }
+
+    var draw: Shape {
+        return self
+    }
+
+    var win: Shape {
+        switch self {
+        case .rock: return .scissors
+        case .paper: return .rock
+        case .scissors: return .paper
+        }
+    }
+
+    var lose: Shape {
+        switch self {
+        case .rock: return .paper
+        case .paper: return .scissors
+        case .scissors: return .rock
         }
     }
 }
@@ -55,36 +75,26 @@ final class Day02: AOCDay {
     }
 
     private func fight(_ hands: Hands) -> Int {
-        switch (hands.opponent, hands.mine) {
-        case (.rock, .rock): return 3
-        case (.paper, .paper): return 3
-        case (.scissors, .scissors): return 3
-
-        case (.rock, .scissors): return 0
-        case (.scissors, .rock): return 6
-
-        case (.paper, .rock): return 0
-        case (.rock, .paper): return 6
-
-        case (.scissors, .paper): return 0
-        case (.paper, .scissors): return 6
+        if hands.opponent.draw == hands.mine {
+            return 3
         }
+
+        if hands.opponent.lose == hands.mine {
+            return 6
+        }
+
+        assert(hands.opponent.win == hands.mine)
+        return 0
     }
 
-    // rock = loose
+    // rock = lose
     // paper = draw
     // scissors = win
     private func choose(_ hands: Hands) -> Shape {
-        switch (hands.opponent, hands.mine) {
-        case (_, .paper): return hands.opponent
-
-        case (.rock, .rock): return .scissors
-        case (.scissors, .rock): return .paper
-        case (.paper, .rock): return .rock
-
-        case (.scissors, .scissors): return .rock
-        case (.rock, .scissors): return .paper
-        case (.paper, .scissors): return .scissors
+        switch hands.mine {
+        case .paper: return hands.opponent.draw
+        case .rock: return hands.opponent.win
+        case .scissors: return hands.opponent.lose
         }
     }
 }

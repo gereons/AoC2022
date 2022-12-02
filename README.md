@@ -9,12 +9,12 @@ All code for all days is compiled into a single macOS commandline binary, which 
 Each day has at least 3 associated source files: 
 
 * `DayX.swift` for the solution code
-* `DayX+Input.swift` for the puzzle input. This file is created by running the `input.sh` script
+* `DayX+Input.swift` for the puzzle input. This file is created by running the included `input.sh` script
 * `DayXTests.swift` for the test suite, if the puzzle has test cases
 
 `AoC.swift` has the `main()` function which simply runs one (or all) of the puzzles.
 
-The code relies on my own [AoCTools](https://github.com/gereons/AoCTools) package where I started collecting utility functions for things frequently used in AoC, such as 2d and 3d points, hexagonal grids, an A* pathfinder and more.
+The code relies on my own [AoCTools](https://github.com/gereons/AoCTools) package where I started collecting utility functions for things frequently used in AoC, such as 2d and 3d points, hexagonal grids, an A\* pathfinder and more.
 
 ### Xcode
 
@@ -24,7 +24,7 @@ Open the project via the `Package.swift` file (`xed .` from Terminal in the proj
 
 ### Commandline
 
-From the commandline, use `swift run` or `swift run --configuration release`. 
+From the commandline, use `swift run` or `swift run -c release`. 
 
 To run the puzzle for a specific day without changing `AoC.swift`, use `swift run AdventOfCode X` to run day `X`. `X` can be a number from 1 to 25 or `all`.
 
