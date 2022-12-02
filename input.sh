@@ -40,6 +40,6 @@ cat <<END
 """#
 }
 END
-) >Sources/Day$D2/Day$D2+input.swift
+) >Sources/Day$D2/Day$D2+Input.swift
 
 rm $TMP
