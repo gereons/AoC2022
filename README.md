@@ -31,6 +31,14 @@ To run the puzzle for a specific day without changing `AoC.swift`, use `swift ru
 To run tests, use `swift test` for all tests, or e.g. `swift test --filter aocTests.Day02Tests` to run the tests for day 2.
 
 <!--- advent_readme_stars table --->
+## 2022 Results
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---: |
+| [Day 1](https://adventofcode.com/2022/day/1) | ⭐ | ⭐ |
+| [Day 2](https://adventofcode.com/2022/day/2) | ⭐ | ⭐ |
+| [Day 3](https://adventofcode.com/2022/day/3) | ⭐ | ⭐ |
+<!--- advent_readme_stars table --->
 
 ### Time Log
 
