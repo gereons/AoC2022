@@ -7,16 +7,44 @@
 import AoCTools
 
 final class Day03: AOCDay {
-    let input: String
+    let rucksacks: [String]
+
     init(rawInput: String? = nil) {
-        self.input = rawInput ?? Self.rawInput
+        let input = rawInput ?? Self.rawInput
+        rucksacks = input.lines
     }
 
     func part1() -> Int {
-        return 0
+        var prio = 0
+        for rucksack in rucksacks {
+            let set1 = Set(rucksack.prefix(rucksack.count / 2).map { $0 })
+            let set2 = Set(rucksack.suffix(rucksack.count / 2).map { $0 })
+
+            let common = set1.intersection(set2)
+            prio += priority(for: common.first!)
+        }
+
+        return prio
     }
 
     func part2() -> Int {
-        return 0
+        var prio = 0
+        for group in rucksacks.chunked(3) {
+            let sets = group.map { Set($0.map { $0 }) }
+            let common = sets[0].intersection(sets[1]).intersection(sets[2])
+            prio += priority(for: common.first!)
+        }
+        return prio
+    }
+
+    private func priority(for ch: Character) -> Int {
+        let ascii = Int(ch.asciiValue!)
+        if ascii >= 97 {
+            return ascii - 96
+        } else if ascii >= 64 {
+            return ascii - 38
+        } else {
+            fatalError()
+        }
     }
 }
