@@ -20,11 +20,11 @@ final class Day04: AOCDay {
         let regex = Regex {
             Capture(as: r1start) { ZeroOrMore(.digit) } transform: { Int($0)! }
             "-"
-            Capture(as: r1end)  { ZeroOrMore(.digit) } transform: { Int($0)! }
+            Capture(as: r1end) { ZeroOrMore(.digit) } transform: { Int($0)! }
             ","
-            Capture(as: r2start)  { ZeroOrMore(.digit) } transform: { Int($0)! }
+            Capture(as: r2start) { ZeroOrMore(.digit) } transform: { Int($0)! }
             "-"
-            Capture(as: r2end)  { ZeroOrMore(.digit) } transform: { Int($0)! }
+            Capture(as: r2end) { ZeroOrMore(.digit) } transform: { Int($0)! }
         }
 
         assignments = input.lines.map {

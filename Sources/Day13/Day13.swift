@@ -7,11 +7,11 @@
 import AoCTools
 
 final class Day13: AOCDay {
-    let input: String
-    init(rawInput: String? = nil) {
-        self.input = rawInput ?? Self.rawInput
-    }
 
+    init(rawInput: String? = nil) {
+        // let input = rawInput ?? Self.rawInput
+    }
+    
     func part1() -> Int {
         return 0
     }

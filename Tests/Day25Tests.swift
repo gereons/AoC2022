@@ -3,7 +3,8 @@ import XCTest
 
 final class Day25Tests: XCTestCase {
     func testDay25_1() throws {
-        let day = Day25(rawInput: "foo")
+        let day = Day25(rawInput: """
+""")
         XCTAssertEqual(day.part1(), 0)
     }
 }
