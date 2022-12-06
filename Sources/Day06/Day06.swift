@@ -11,7 +11,7 @@ final class Day06: AOCDay {
     
     init(rawInput: String? = nil) {
         let input = rawInput ?? Self.rawInput
-        chars = input.map { $0 }
+        chars = Array(input)
     }
 
     func part1() -> Int {
@@ -23,8 +23,8 @@ final class Day06: AOCDay {
     }
 
     private func findMarker(length: Int) -> Int {
-        for i in 0 ... (chars.count - length - 1) {
-            let marker = chars[i ... i + length - 1]
+        for i in 0 ..< (chars.count - length) {
+            let marker = chars[i ..< i + length]
             if Set(marker).count == length {
                 return i + length
             }
