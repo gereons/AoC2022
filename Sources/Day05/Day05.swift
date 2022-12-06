@@ -34,10 +34,10 @@ final class Day05: AOCDay {
             // 01234567890
             // [Z] [M] [P]
             for (index, ch) in line.enumerated() {
-                if ch.isNumber || ch == " " {
-                    continue
-                }
                 if (index - 1).isMultiple(of: 4) {
+                    if ch.isNumber || ch == " " {
+                        continue
+                    }
                     let crate = 1 + (index - 1) / 4
                     crates[crate, default: []].append(ch)
                 }
