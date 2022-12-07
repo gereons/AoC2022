@@ -51,7 +51,7 @@ To run tests, use `swift test` for all tests, or e.g. `swift test --filter aocTe
 * Day4: 11:20 - 11:35
 * Day5: 09:25 - 09:58
 * Day6: 08:48 - 08:57
-* Day7  
+* Day7: 10:45 - 13:02  
 * Day8  
 * Day9  
 * Day10  
