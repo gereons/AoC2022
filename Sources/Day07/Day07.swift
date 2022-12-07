@@ -90,38 +90,36 @@ final class Day07: AOCDay {
         let rootSize = totals[.root]!
         let currentFree = diskSize - rootSize
 
-        return totals.values.sorted(by: <).filter { currentFree + $0 >= requiredFree }.first!
+        return totals.values
+            .sorted(by: <)
+            .filter { currentFree + $0 >= requiredFree }
+            .first!
     }
 
     private func diskUsage() -> [Directory: Int] {
-        // get individual dir sizes
-        var sizes = [Directory: Int]()
+        var usage = [Directory: Int]()
         var cwd = Directory()
+
         for line in lines {
             switch line {
-            case .cd(let dir):
-                cwd = cwd.chdir(to: dir)
-            case .ls:
+            case .ls, .dir:
                 continue
-            case .dir(let dir):
-                // make sure to create a record for each directory in case it contains no files
-                sizes[cwd.chdir(to: dir)] = 0
             case .file(let size):
-                sizes[cwd, default: 0] += size
+                usage[cwd, default: 0] += size
+            case .cd(let dir):
+                let newDir = cwd.chdir(to: dir)
+                if dir == ".." {
+                    usage[newDir, default: 0] += usage[cwd]!
+                }
+                cwd = newDir
             }
         }
-
-        // sum sizes from the bottom up
-        var totals = [Directory: Int]()
-        for (dir, size) in sizes.sorted(by: { $0.key.depth > $1.key.depth }) {
-            totals[dir, default: 0] += size
-
-            if dir.depth > 1 {
-                let parent = dir.chdir(to: "..")
-                totals[parent, default: 0] += totals[dir]!
-            }
+        while cwd != .root {
+            let parent = cwd.chdir(to: "..")
+            usage[parent, default: 0] += usage[cwd]!
+            cwd = parent
         }
 
-        return totals
+        return usage
     }
 }
