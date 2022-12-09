@@ -44,7 +44,7 @@ final class Day09: AOCDay {
 
         for motion in motions {
             for _ in 0 ..< motion.distance {
-                head = head.moved(motion.direction)
+                head = head.moved(to: motion.direction)
 
                 var prev = head
                 var newTail = [Point]()
@@ -90,21 +90,21 @@ final class Day09: AOCDay {
 
 extension Point {
     func follow(_ point: Point) -> Point {
-        let dx = point.x - self.x
-        let dy = point.y - self.y
-        if abs(dx) <= 1 && abs(dy) <= 1 {
+        guard chebyshevDistance(to: point) > 1 else {
             return self
         }
 
-        // move
-        if abs(dx) == 2 && abs(dy) == 2 {
-            return Point(point.x - dx.signum(), point.y - dy.signum())
+        var newX = point.x
+        var newY = point.y
+        let dx = point.x - self.x
+        let dy = point.y - self.y
+
+        if dx == 0 || abs(dx) == 2 {
+            newX -= dx.signum()
         }
-        if dx == 0 || abs(dy) == 2 {
-            return Point(point.x, point.y - dy.signum())
-        } else if dy == 0 || abs(dx) == 2 {
-            return Point(point.x - dx.signum(), point.y)
+        if dy == 0 || abs(dy) == 2 {
+            newY -= dy.signum()
         }
-        fatalError()
+        return Point(newX, newY)
     }
 }
