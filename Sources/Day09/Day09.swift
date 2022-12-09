@@ -10,16 +10,14 @@ private struct Motion {
     let dir: Point.Direction
     let dist: Int
 
+    static let dirMap: [String: Point.Direction] = [
+        "U": .n, "L": .w, "R": .e, "D": .s
+    ]
+
     init(_ str: String) {
         let parts = str.components(separatedBy: " ")
+        dir = Self.dirMap[parts[0]]!
         dist = Int(parts[1])!
-        switch parts[0] {
-        case "U": dir = .n
-        case "L": dir = .w
-        case "R": dir = .e
-        case "D": dir = .s
-        default: fatalError()
-        }
     }
 }
 
@@ -39,22 +37,7 @@ final class Day09: AOCDay {
         for motion in motions {
             for _ in 0 ..< motion.dist {
                 head = head.moved(motion.dir)
-                let dx = head.x - tail.x
-                let dy = head.y - tail.y
-                if abs(dx) > 1 || abs(dy) > 1 {
-                    // move tail
-                    if dx == 0 || dy == 0 {
-                        tail = tail.moved(motion.dir)
-                    } else {
-                        if abs(dx) == 2 {
-                            tail = Point(head.x - dx.signum(), head.y)
-                        } else if abs(dy) == 2 {
-                            tail = Point(head.x, head.y - dy.signum())
-                        } else {
-                            fatalError()
-                        }
-                    }
-                }
+                tail = tail.follow(head)
                 visited.insert(tail)
             }
         }
@@ -89,5 +72,23 @@ final class Day09: AOCDay {
             }
             print()
         }
+    }
+}
+
+extension Point {
+    func follow(_ point: Point) -> Point {
+        let dx = point.x - self.x
+        let dy = point.y - self.y
+        if abs(dx) <= 1 && abs(dy) <= 1 {
+            return self
+        }
+
+        // move
+        if dx == 0 || abs(dy) == 2 {
+            return Point(point.x, point.y - dy.signum())
+        } else if dy == 0 || abs(dx) == 2 {
+            return Point(point.x - dx.signum(), point.y)
+        }
+        fatalError()
     }
 }
