@@ -7,8 +7,8 @@
 import AoCTools
 
 private struct Motion {
-    let dir: Point.Direction
-    let dist: Int
+    let direction: Point.Direction
+    let distance: Int
 
     static let dirMap: [String: Point.Direction] = [
         "U": .n, "L": .w, "R": .e, "D": .s
@@ -16,8 +16,8 @@ private struct Motion {
 
     init(_ str: String) {
         let parts = str.components(separatedBy: " ")
-        dir = Self.dirMap[parts[0]]!
-        dist = Int(parts[1])!
+        direction = Self.dirMap[parts[0]]!
+        distance = Int(parts[1])!
     }
 }
 
@@ -30,39 +30,52 @@ final class Day09: AOCDay {
     }
 
     func part1() -> Int {
+        simulateBridge(tailLength: 1)
+    }
+
+    func part2() -> Int {
+        simulateBridge(tailLength: 9)
+    }
+
+    private func simulateBridge(tailLength: Int) -> Int {
         var head = Point.zero
-        var tail = head
+        var tail = [Point](repeating: .zero, count: tailLength)
         var visited = Set<Point>()
 
         for motion in motions {
-            for _ in 0 ..< motion.dist {
-                head = head.moved(motion.dir)
-                tail = tail.follow(head)
-                visited.insert(tail)
+            for _ in 0 ..< motion.distance {
+                head = head.moved(motion.direction)
+
+                var prev = head
+                var newTail = [Point]()
+                for t in tail {
+                    let p = t.follow(prev)
+                    prev = p
+                    newTail.append(p)
+                }
+
+                tail = newTail
+                visited.insert(tail.last!)
             }
         }
 
         return visited.count
     }
 
-    func part2() -> Int {
-        return 0
-    }
-
-    private func draw(head: Point, tail: Point, visited: Set<Point>) {
-        let minX = min(head.x, tail.x, visited.map { $0.x }.min()! )
-        let minY = min(head.y, tail.y, visited.map { $0.y }.min()! )
-        let maxX = max(head.x, tail.x, visited.map { $0.x }.max()! )
-        let maxY = max(head.y, tail.y, visited.map { $0.y }.max()! )
+    private func draw(head: Point, tail: [Point]) {
+        let minX = min(head.x, tail.map { $0.x }.min()!)
+        let minY = min(head.y, tail.map { $0.y }.min()!)
+        let maxX = max(head.x, tail.map { $0.x }.max()!)
+        let maxY = max(head.y, tail.map { $0.y }.max()!)
 
         for y in minY...maxY {
             for x in minX...maxX {
                 let p = Point(x, y)
-                let ch: Character
+                let ch: String
                 if p == head {
                     ch = "H"
-                } else if p == tail {
-                    ch = "T"
+                } else if let index = tail.firstIndex(of: p) {
+                    ch = "\(index+1)"
                 } else if p == .zero {
                     ch = "s"
                 } else {
@@ -84,6 +97,9 @@ extension Point {
         }
 
         // move
+        if abs(dx) == 2 && abs(dy) == 2 {
+            return Point(point.x - dx.signum(), point.y - dy.signum())
+        }
         if dx == 0 || abs(dy) == 2 {
             return Point(point.x, point.y - dy.signum())
         } else if dy == 0 || abs(dx) == 2 {
