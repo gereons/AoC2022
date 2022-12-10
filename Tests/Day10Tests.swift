@@ -158,7 +158,7 @@ noop
 
     func testDay10_2() throws {
         let day = Day10(rawInput: input)
-        let expect = [
+        let expectData = [
             "",
             "##..##..##..##..##..##..##..##..##..##..",
             "###...###...###...###...###...###...###.",
@@ -167,7 +167,11 @@ noop
             "######......######......######......####",
             "#######.......#######.......#######....."
         ]
+        let expect = expectData
+            .joined(separator: "\n")
+            .replacingOccurrences(of: ".", with: "⬜️")
+            .replacingOccurrences(of: "#", with: "⬛️")
 
-        XCTAssertEqual(day.part2(), expect.joined(separator: "\n"))
+        XCTAssertEqual(day.part2(), expect)
     }
 }

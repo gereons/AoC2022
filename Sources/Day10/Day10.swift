@@ -10,11 +10,11 @@ private enum Instruction {
     case noop
     case addx(Int)
 
-    init(_ str: String) {
+    static func decode(_ str: String) -> [Instruction] {
         let parts = str.components(separatedBy: " ")
         switch parts[0] {
-        case "noop": self = .noop
-        case "addx": self = .addx(Int(parts[1])!)
+        case "noop": return [.noop]
+        case "addx": return [.noop, .addx(Int(parts[1])!)]
         default: fatalError()
         }
     }
@@ -25,6 +25,9 @@ private class CPU {
     private var x = 1
     private var cycle = 1
 
+    let crtWidth = 40
+    let crtHeight = 6
+
     init(program: [Instruction]) {
         self.program = program
     }
@@ -32,7 +35,7 @@ private class CPU {
     func findSignalStrength() -> Int {
         var strength = 0
         run {
-            if (cycle-20).isMultiple(of: 40) {
+            if (cycle - 20).isMultiple(of: 40) {
                 strength += cycle * x
             }
         }
@@ -40,18 +43,13 @@ private class CPU {
     }
 
     func render() -> String {
-        var crt = [[Character]](repeating: [Character](repeating: ".", count: 40), count: 6)
-        var crtX = 0
-        var crtY = 0
+        let line = [Character](repeating: "⬜️", count: crtWidth)
+        var crt = [[Character]](repeating: line, count: crtHeight)
 
         run {
-            if (crtX-1)...(crtX+1) ~= x {
-                crt[crtY][crtX] = "#"
-            }
-            crtX += 1
-            if crtX >= 40 {
-                crtX = 0
-                crtY += 1
+            let (crtY, crtX) = (cycle - 1).quotientAndRemainder(dividingBy: crtWidth)
+            if (crtX - 1)...(crtX + 1) ~= x {
+                crt[crtY][crtX] = "⬛️"
             }
         }
 
@@ -64,12 +62,7 @@ private class CPU {
         for instruction in program {
             step()
             cycle += 1
-            switch instruction {
-            case .noop:
-                continue
-            case .addx(let add):
-                step()
-                cycle += 1
+            if case Instruction.addx(let add) = instruction {
                 x += add
             }
         }
@@ -81,7 +74,7 @@ final class Day10: AOCDay {
 
     init(rawInput: String? = nil) {
         let input = rawInput ?? Self.rawInput
-        program = input.lines.map { Instruction($0) }
+        program = input.lines.flatMap { Instruction.decode($0) }
     }
 
     func part1() -> Int {
