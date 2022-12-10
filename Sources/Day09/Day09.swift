@@ -90,6 +90,7 @@ final class Day09: AOCDay {
 
 extension Point {
     func follow(_ point: Point) -> Point {
+        // don't move if we're adjacent
         guard chebyshevDistance(to: point) > 1 else {
             return self
         }
@@ -99,10 +100,11 @@ extension Point {
         let dx = point.x - self.x
         let dy = point.y - self.y
 
-        if dx == 0 || abs(dx) == 2 {
+        // if we're more than one 1 step away on an axis, move along that axis
+        if abs(dx) > 1 {
             newX -= dx.signum()
         }
-        if dy == 0 || abs(dy) == 2 {
+        if abs(dy) > 1 {
             newY -= dy.signum()
         }
         return Point(newX, newY)
