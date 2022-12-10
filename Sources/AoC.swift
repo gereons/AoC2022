@@ -27,8 +27,12 @@ struct AdventOfCode {
     }
 
     static var today: Day {
-        let today = Calendar.current.component(.day, from: Date())
-        return 1...25 ~= today ? .day(today) : .day(1)
+        let components = Calendar.current.dateComponents([.day, .month], from: Date())
+        let day = components.day!
+        if components.month == 12 {
+            return 1...25 ~= day ? .day(day) : .all
+        }
+        return .all
     }
 
     private static func run(_ day: Day) {

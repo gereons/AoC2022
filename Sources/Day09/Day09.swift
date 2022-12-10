@@ -40,6 +40,7 @@ final class Day09: AOCDay {
     private func simulateBridge(tailLength: Int) -> Int {
         var head = Point.zero
         var tail = [Point](repeating: .zero, count: tailLength)
+        var newTail = tail
         var visited = Set<Point>()
 
         for motion in motions {
@@ -47,15 +48,14 @@ final class Day09: AOCDay {
                 head = head.moved(to: motion.direction)
 
                 var prev = head
-                var newTail = [Point]()
-                for t in tail {
+                for (index, t) in tail.enumerated() {
                     let p = t.follow(prev)
                     prev = p
-                    newTail.append(p)
+                    newTail[index] = p
                 }
 
                 tail = newTail
-                visited.insert(tail.last!)
+                visited.insert(tail[tailLength - 1])
             }
         }
 

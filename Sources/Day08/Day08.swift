@@ -36,7 +36,7 @@ final class Day08: AOCDay {
                         n = n.moved(to: direction)
                     }
                 }
-                if visible.count(where: { $0.value }) > 0 {
+                if visible.values.first(where: { $0 }) != nil {
                     innerVisible += 1
                 }
             }
@@ -50,15 +50,15 @@ final class Day08: AOCDay {
         let maxX = trees[0].count - 1
         let maxY = trees.count - 1
 
-        var scenicScores = [Int]()
+        var scenicScore = Int.min
         for y in 1 ..< trees.count - 1 {
             for x in 1 ..< trees[0].count - 1 {
                 let height = trees[y][x]
-                var visible = [Point.Direction: Int]()
+                var visible: [Point.Direction: Int] = [.n: 0, .w: 0, .e: 0, .s: 0]
                 for direction in Point.Direction.orthogonal {
                     var n = Point(x, y).moved(to: direction)
                     while 0...maxX ~= n.x && 0...maxY ~= n.y {
-                        visible[direction, default: 0] += 1
+                        visible[direction]! += 1
                         if trees[n.y][n.x] >= height {
                             break
                         }
@@ -66,10 +66,10 @@ final class Day08: AOCDay {
                     }
                 }
                 let score = visible.values.reduce(1, *)
-                scenicScores.append(score)
+                scenicScore = max(scenicScore, score)
             }
         }
 
-        return scenicScores.max()!
+        return scenicScore
     }
 }
