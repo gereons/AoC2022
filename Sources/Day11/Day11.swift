@@ -10,6 +10,14 @@ private enum Operation {
     case add(Int)
     case multiply(Int)
     case square
+
+    func perform(input: Int) -> Int {
+        switch self {
+        case .add(let add): return input + add
+        case .multiply(let mul): return input * mul
+        case .square: return input * input
+        }
+    }
 }
 
 private class Monkey {
@@ -72,35 +80,28 @@ final class Day11: AOCDay {
     }
 
     private func monkeyBusiness(rounds: Int, reduceWorry: Bool) -> Int {
-        var inspectCounts = [Int: Int]()
+        var inspectCounts = [Int](repeating: 0, count: monkeys.count)
 
-        var items = Dictionary(uniqueKeysWithValues: monkeys.map { ($0.id, $0.items) })
+        var items = monkeys.map { $0.items }
         let modulus = monkeys.map { $0.testDivisible }.reduce(1, *)
 
         for _ in 0 ..< rounds {
             for monkey in monkeys {
-                inspectCounts[monkey.id, default: 0] += items[monkey.id]!.count
-                for item in items[monkey.id]! {
-                    var worry = item
-                    switch monkey.operation {
-                    case .add(let add): worry += add
-                    case .multiply(let mul): worry *= mul
-                    case .square: worry *= worry
-                    }
+                inspectCounts[monkey.id] += items[monkey.id].count
+                for item in items[monkey.id] {
+                    var worry = monkey.operation.perform(input: item)
                     worry %= modulus
                     if reduceWorry {
                         worry /= 3
                     }
-                    if worry.isMultiple(of: monkey.testDivisible) {
-                        items[monkey.throwTrue]!.append(worry)
-                    } else {
-                        items[monkey.throwFalse]!.append(worry)
-                    }
+
+                    let throwTo = worry.isMultiple(of: monkey.testDivisible) ? monkey.throwTrue : monkey.throwFalse
+                    items[throwTo].append(worry)
                 }
-                items[monkey.id] = []
+                items[monkey.id].removeAll(keepingCapacity: true)
             }
         }
 
-        return inspectCounts.values.sorted(by: >).prefix(2).reduce(1, *)
+        return inspectCounts.sorted(by: >).prefix(2).reduce(1, *)
     }
 }
