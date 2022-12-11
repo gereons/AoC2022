@@ -63,7 +63,7 @@ Use the included `input.sh` script to download your puzzle input. To be able to 
 * Day8: 44m - 13:11 - 13:55
 * Day9: 57m - 08:55 - 09:29, 10:45 - 11:08
 * Day10: 43m - 12:25 - 13:18
-* Day11  
+* Day11: 1:33h - 11:29 - 13:02
 * Day12  
 * Day13  
 * Day14  
