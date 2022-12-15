@@ -12,25 +12,26 @@ private struct Sensor {
     let beacon: Point
     let range: Int
 
+    static let number = Capture {
+        Optionally("-")
+        ZeroOrMore(.digit)
+    } transform: { Int($0)! }
+
+    static let regex = Regex {
+        "Sensor at x="
+        number
+        ", y="
+        number
+        ": closest beacon is at x="
+        number
+        ", y="
+        number
+    }
+
     init(_ str: String) {
         // Sensor at x=2, y=18: closest beacon is at x=-2, y=15
-        let number = Capture {
-            Optionally("-")
-            ZeroOrMore(.digit)
-        } transform: { Int($0)! }
 
-        let regex = Regex {
-            "Sensor at x="
-            number
-            ", y="
-            number
-            ": closest beacon is at x="
-            number
-            ", y="
-            number
-        }
-
-        let matches = try! regex.wholeMatch(in: str)!.output
+        let matches = try! Self.regex.wholeMatch(in: str)!.output
         position = Point(matches.1, matches.2)
         beacon = Point(matches.3, matches.4)
         range = position.distance(to: beacon)
@@ -41,6 +42,20 @@ private enum Tile: Character, Drawable {
     case sensor = "S"
     case beacon = "B"
     case empty = "#"
+}
+
+private extension Point {
+    func isInRange(of sensors: [Sensor]) -> Bool {
+        for sensor in sensors {
+            if self == sensor.position || self == sensor.beacon {
+                return false
+            }
+            if distance(to: sensor.position) <= sensor.range {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 final class Day15: AOCDay {
@@ -76,121 +91,54 @@ final class Day15: AOCDay {
         var count = 0
         for x in minX - leftRange ... maxX + rightRange {
             let point = Point(x, row)
-            if isInRange(point, sensors) {
+            if point.isInRange(of: sensors) {
                 count += 1
             }
         }
-
         return count
     }
-
-    private func isInRange(_ point: Point, _ sensors: [Sensor]) -> Bool {
-        for sensor in sensors {
-            if point == sensor.position { return false }
-            if point == sensor.beacon { return false }
-            if point.distance(to: sensor.position) <= sensor.range { return true }
-        }
-        return false
-    }
-
 
     func part2() -> Int {
-        var grid = [Point: Tile]()
-        var maxX = Int.min
-        var minX = Int.max
-        for sensor in sensors {
-            grid[sensor.position] = .sensor
-            grid[sensor.beacon] = .beacon
-            maxX = max(maxX, sensor.position.x)
-            minX = min(minX, sensor.position.x)
-        }
-        let leftRange = sensors.filter { $0.position.x == minX }.max(of: \.range)!
-        let rightRange = sensors.filter { $0.position.x == maxX }.max(of: \.range)!
-
-        var missing = Point.zero
-        for y in 0 ... size {
-            print(y)
-            for x in max(0, minX - leftRange) ... min(size, maxX + rightRange) {
-                let point = Point(x, y)
-                if isDistress(point, sensors) {
-                    missing = point
-                    break
-                }
-            }
-        }
-
-        return missing.x * 4000000 + missing.y
-    }
-
-    private func isDistress(_ point: Point, _ sensors: [Sensor]) -> Bool {
-        for sensor in sensors {
-            if point == sensor.position { return false }
-            if point == sensor.beacon { return false }
-            if point.distance(to: sensor.position) <= sensor.range { return false }
-        }
-        return true
-    }
-}
-
-extension Day15 {
-    func part1_naive() -> Int {
-        var grid = [Point: Tile]()
-        for sensor in sensors {
-            grid[sensor.position] = .sensor
-            grid[sensor.beacon] = .beacon
-        }
+        var borders = [Point]()
+        let totalRange = sensors.map { $0.range }.reduce(0, +)
+        borders.reserveCapacity(totalRange * 4)
 
         for sensor in sensors {
-            let range = sensor.range + 1
-            for x in sensor.position.x - range ... sensor.position.x + range {
-                for y in sensor.position.y - range ... sensor.position.y + range {
-                    let p = Point(x, y)
-                    if p.distance(to: sensor.position) < range && grid[p] == nil {
-                        grid[p] = .empty
+            let n = sensor.position + Point.Direction.n.offset * (sensor.range + 1)
+            let w = sensor.position + Point.Direction.w.offset * (sensor.range + 1)
+            let s = sensor.position + Point.Direction.s.offset * (sensor.range + 1)
+            let e = sensor.position + Point.Direction.e.offset * (sensor.range + 1)
+            let corners = [n,w,s,e,n]
+
+            for p in zip(corners, corners.dropFirst()) {
+                let border = points(from: p.0, to: p.1)
+                    .filter {
+                        $0.x >= 0 && $0.x <= size &&
+                        $0.y >= 0 && $0.y <= size
                     }
-                }
+                borders.append(contentsOf: border)
             }
         }
 
-        // Grid(points: grid).draw()
-        let minX = grid.keys.min(of: \.x)!
-        let maxX = grid.keys.max(of: \.x)!
-
-        var count = 0
-        for x in minX ... maxX {
-            if grid[Point(x, row)] == .empty {
-                count += 1
+        for borderPoint in borders {
+            if !borderPoint.isInRange(of: sensors) {
+                return borderPoint.x * 4000000 + borderPoint.y
             }
         }
-        return count
+
+        fatalError()
     }
 
-    func part2_naive() -> Int {
-        var grid = [Point: Tile]()
+    private func points(from start: Point, to end: Point) -> [Point] {
+        var result = [Point]()
 
-        for sensor in sensors {
-            grid[sensor.position] = .sensor
-            grid[sensor.beacon] = .beacon
+        let dx = (end.x - start.x).signum()
+        let dy = (end.y - start.y).signum()
+        let range = abs(start.x - end.x)
+        result.reserveCapacity(range)
+        result = (0..<range).map { step in
+            Point(start.x + dx * step, start.y + dy * step)
         }
-
-        for sensor in sensors {
-            let range = sensor.range + 1
-            for x in sensor.position.x - range ... sensor.position.x + range {
-                for y in sensor.position.y - range ... sensor.position.y + range {
-                    let p = Point(x, y)
-                    if p.distance(to: sensor.position) < range && grid[p] == nil {
-                        grid[p] = .empty
-                    }
-                }
-            }
-        }
-
-        grid = grid
-            .filter {
-                $0.key.x >= 0 && $0.key.x <= size &&
-                $0.key.y >= 0 && $0.key.y <= size
-            }
-
-        return 0
+        return result
     }
 }
