@@ -47,6 +47,15 @@ private enum Tile: Character, Drawable {
 private extension Point {
     func isInRange(of sensors: [Sensor]) -> Bool {
         for sensor in sensors {
+            if distance(to: sensor.position) <= sensor.range {
+                return true
+            }
+        }
+        return false
+    }
+
+    func isOccupiedOrInRange(of sensors: [Sensor]) -> Bool {
+        for sensor in sensors {
             if self == sensor.position || self == sensor.beacon {
                 return false
             }
@@ -91,7 +100,7 @@ final class Day15: AOCDay {
         var count = 0
         for x in minX - leftRange ... maxX + rightRange {
             let point = Point(x, row)
-            if point.isInRange(of: sensors) {
+            if point.isOccupiedOrInRange(of: sensors) {
                 count += 1
             }
         }

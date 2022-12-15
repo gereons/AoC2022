@@ -28,7 +28,7 @@ From the commandline, use `swift run` or `swift run -c release`.
 
 To run the puzzle for a specific day without changing `AoC.swift`, use `swift run AdventOfCode X` to run day `X`. `X` can be a number from 1 to 25 or `all`.
 
-To run tests, use `swift test` for all tests, or e.g. `swift test --filter aocTests.Day02Tests` to run the tests for day 2.
+To run tests, use `swift test` for all tests, or e.g. `swift test --filter AoCTests.Day02` to run the tests for day 2.
 
 ### Puzzle Inputs
 

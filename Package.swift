@@ -25,7 +25,7 @@ let package = Package(
             ],
             path: "Sources"),
         .testTarget(
-            name: "aocTests",
+            name: "AoCTests",
             dependencies: [ "AdventOfCode" ],
             path: "Tests")
     ]
