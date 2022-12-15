@@ -108,7 +108,7 @@ final class Day15: AOCDay {
 
     private func combineRanges(_ ranges: [ClosedRange<Int>]) -> [ClosedRange<Int>] {
         var combined = [ClosedRange<Int>]()
-        var accumulator = (0...0) // empty range
+        var accumulator = (0...0)
 
         for range in ranges.sorted(by: { $0.lowerBound  < $1.lowerBound  } ) {
             if accumulator == (0...0) {
@@ -149,10 +149,6 @@ final class Day15: AOCDay {
 
             for p in zip(corners, corners.dropFirst()) {
                 let border = points(from: p.0, to: p.1)
-                    .filter {
-                        $0.x >= 0 && $0.x <= size &&
-                        $0.y >= 0 && $0.y <= size
-                    }
                 borders.append(contentsOf: border)
             }
         }
@@ -173,8 +169,12 @@ final class Day15: AOCDay {
         let dy = (end.y - start.y).signum()
         let range = abs(start.x - end.x)
         result.reserveCapacity(range)
-        result = (0..<range).map { step in
-            Point(start.x + dx * step, start.y + dy * step)
+        result = (0..<range).compactMap { step in
+            let p = Point(start.x + dx * step, start.y + dy * step)
+            if p.x >= 0 && p.x <= size && p.y >= 0 && p.y <= size {
+                return p
+            }
+            return nil
         }
         return result
     }
