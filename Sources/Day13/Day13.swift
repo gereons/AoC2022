@@ -9,7 +9,7 @@ import Foundation
 
 private enum Data {
     case int(Int)
-    indirect case list([Data])
+    case list([Data])
 }
 
 extension Data: CustomStringConvertible {
@@ -47,10 +47,10 @@ extension Data: Comparable {
         switch (lhs, rhs) {
         case (.int(let i1), .int(let i2)):
             return i1 < i2
-        case (.list, .int(let i2)):
-            return lhs < .list([.int(i2)])
-        case (.int(let i1), .list):
-            return .list([.int(i1)]) < rhs
+        case (.list, .int):
+            return lhs < .list([rhs])
+        case (.int, .list):
+            return .list([lhs]) < rhs
         case (.list(let l1), .list(let l2)):
             for zipped in zip(l1, l2) {
                 if zipped.0 < zipped.1 { return true }

@@ -26,16 +26,12 @@ final class Day14: AOCDay {
                 let xy = part.components(separatedBy: ",")
                 let point = Point(Int(xy[0])!, Int(xy[1])!)
                 cave[point] = .wall
-                if let p = prev {
-                    if point.x == p.x {
-                        for y in stride(from: point.y, through: p.y, by: p.y > point.y ? 1 : -1) {
-                            cave[Point(point.x, y)] = .wall
-                        }
-                    }
-                    if point.y == p.y {
-                        for x in stride(from: point.x, through: p.x, by: p.x > point.x ? 1 : -1) {
-                            cave[Point(x, point.y)] = .wall
-                        }
+                if let prev {
+                    let dx = (point.x - prev.x).signum()
+                    let dy = (point.y - prev.y).signum()
+                    let steps = max(abs(point.x - prev.x), abs(point.y - prev.y))
+                    (0..<steps).forEach { step in
+                        cave[Point(prev.x + dx * step, prev.y + dy * step)] = .wall
                     }
                 }
                 prev = point
@@ -52,8 +48,7 @@ final class Day14: AOCDay {
 
         var cameToRest = true
         while cameToRest {
-            let start = source
-            cameToRest = dropSand(from: start, into: &cave, maxY: maxY)
+            cameToRest = dropSand(from: source, into: &cave, maxY: maxY)
         }
 
         return cave.values.count(where: { $0 == .sand} )
@@ -67,8 +62,7 @@ final class Day14: AOCDay {
 
         var filled = false
         while !filled {
-            let start = source
-            filled = fill(cave: &cave, from: start, floorY: maxY + 2)
+            filled = fill(cave: &cave, from: source, floorY: maxY + 2)
         }
 
         return cave.values.count(where: { $0 == .sand} )
@@ -94,7 +88,7 @@ final class Day14: AOCDay {
             } else {
                 let unit = cave[next]
                 cave[next] = .sand
-                if unit == .source && prev == nil {
+                if unit == .source {
                     return true
                 }
                 return false
