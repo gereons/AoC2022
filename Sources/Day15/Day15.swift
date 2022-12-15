@@ -36,6 +36,15 @@ private struct Sensor {
         beacon = Point(matches.3, matches.4)
         range = position.distance(to: beacon)
     }
+
+    func xRange(atY y: Int) -> ClosedRange<Int>? {
+        guard (position.y - range) ... (position.y + range) ~= y else {
+            return nil
+        }
+
+        let delta = abs(y - position.y)
+        return position.x - range + delta ... position.x + range - delta
+    }
 }
 
 private enum Tile: Character, Drawable {
@@ -85,26 +94,45 @@ final class Day15: AOCDay {
     }
 
     func part1() -> Int {
-        var grid = [Point: Tile]()
-        var maxX = Int.min
-        var minX = Int.max
-        for sensor in sensors {
-            grid[sensor.position] = .sensor
-            grid[sensor.beacon] = .beacon
-            maxX = max(maxX, sensor.position.x)
-            minX = min(minX, sensor.position.x)
-        }
-        let leftRange = sensors.filter { $0.position.x == minX }.max(of: \.range)!
-        let rightRange = sensors.filter { $0.position.x == maxX }.max(of: \.range)!
-
         var count = 0
-        for x in minX - leftRange ... maxX + rightRange {
-            let point = Point(x, row)
-            if point.isOccupiedOrInRange(of: sensors) {
-                count += 1
+
+        let ranges = combineRanges(sensors.compactMap { $0.xRange(atY: row) })
+        for range in ranges {
+            count += range.upperBound - range.lowerBound - 1
+        }
+        let occupied =
+            sensors.map { $0.position }.filter { $0.y == row } +
+            sensors.map { $0.beacon }.filter { $0.y == row }
+        return count + Set(occupied).count
+    }
+
+    private func combineRanges(_ ranges: [ClosedRange<Int>]) -> [ClosedRange<Int>] {
+        var combined = [ClosedRange<Int>]()
+        var accumulator = (0...0) // empty range
+
+        for range in ranges.sorted(by: { $0.lowerBound  < $1.lowerBound  } ) {
+            if accumulator == (0...0) {
+                accumulator = range
+            }
+
+            if accumulator.upperBound >= range.upperBound {
+                // already inside
+                continue
+            } else if accumulator.upperBound >= range.lowerBound  {
+                // extend end
+                accumulator = (accumulator.lowerBound...range.upperBound)
+            } else if accumulator.upperBound <= range.lowerBound  {
+                // no overlap
+                combined.append(accumulator)
+                accumulator = range
             }
         }
-        return count
+
+        if accumulator != (0...0) {
+            combined.append(accumulator)
+        }
+
+        return combined
     }
 
     func part2() -> Int {
