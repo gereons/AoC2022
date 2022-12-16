@@ -148,8 +148,7 @@ final class Day15: AOCDay {
             let corners = [n,w,s,e,n]
 
             for p in zip(corners, corners.dropFirst()) {
-                let border = points(from: p.0, to: p.1)
-                borders.append(contentsOf: border)
+                addPoints(from: p.0, to: p.1, to: &borders)
             }
         }
 
@@ -162,20 +161,15 @@ final class Day15: AOCDay {
         fatalError()
     }
 
-    private func points(from start: Point, to end: Point) -> [Point] {
-        var result = [Point]()
-
+    private func addPoints(from start: Point, to end: Point, to result: inout [Point]) {
         let dx = (end.x - start.x).signum()
         let dy = (end.y - start.y).signum()
         let range = abs(start.x - end.x)
-        result.reserveCapacity(range)
-        result = (0..<range).compactMap { step in
+        for step in 0 ..< range {
             let p = Point(start.x + dx * step, start.y + dy * step)
             if p.x >= 0 && p.x <= size && p.y >= 0 && p.y <= size {
-                return p
+                result.append(p)
             }
-            return nil
         }
-        return result
     }
 }
