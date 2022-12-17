@@ -30,27 +30,27 @@ private struct Shape {
     static let block = Shape(points: [Point(0,0), Point(0,1), Point(1,0), Point(1,1)], height: 2)
 }
 
-private struct Playfield {
-    private(set) var grid = [Point: Bool]()
-    private(set) var minY: Int
+private class Playfield {
+    private var grid = [Point: Bool]()
+    private var minY: Int
+    private var highYs: [Int]
 
     var accumulatedHeight: Int { -minY + 1 }
 
     init() {
         minY = 1
-        add(Point(-1, 1).line(to: Point(7,1)))
-    }
-
-    mutating func add(_ shape: Shape) {
-        add(shape.points)
-        self.minY = min(self.minY, shape.points.min(of: \.y)!)
-    }
-
-    mutating func add(_ points: [Point]) {
-        points.forEach {
-            assert(grid[$0] == nil)
+        highYs = [Int](repeating: 1, count: 7)
+        Point(-1, 1).line(to: Point(7,1)).forEach {
             grid[$0] = true
         }
+    }
+
+    func add(_ shape: Shape) {
+        shape.points.forEach { p in
+            grid[p] = true
+            highYs[p.x] = min(highYs[p.x], p.y)
+        }
+        self.minY = min(self.minY, shape.points.min(of: \.y)!)
     }
 
     func possiblePlacement(_ shape: Shape) -> Bool {
@@ -63,7 +63,7 @@ private struct Playfield {
     func skyline() -> [Point] {
         var maxY = Int.min
         let points = (0...6).map { x in
-            let y = grid.keys.filter { $0.x == x }.min(of: \.y) ?? 0
+            let y = highYs[x]
             maxY = max(maxY, y)
             return Point(x, y)
         }
@@ -111,9 +111,12 @@ final class Day17: AOCDay {
         let rocks = 1_000_000_000_000 - 1
         var seen = [Key: (Int, Int)]()
 
+        var pc = 0
+
         var playfield = Playfield()
         for block in 0..<Int.max {
             playTetris(in: &playfield)
+            pc += 1
             let key = Key(skyline: playfield.skyline(), shapeIndex: shapeIndex, jetIndex: jetIndex)
             if let (start, height) = seen[key] {
                 let heightGain = playfield.accumulatedHeight - height
@@ -122,6 +125,7 @@ final class Day17: AOCDay {
                 let remainder = (rocks - start) - (loops * loopLen)
                 for _ in 0..<remainder {
                     playTetris(in: &playfield)
+                    pc += 1
                 }
 
                 // -1 loops because we've stopped at the end of the first
