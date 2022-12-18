@@ -11,14 +11,6 @@ private struct Shape {
     let points: [Point]
     let height: Int
 
-    var left: Int {
-        points.min(of: \.x)!
-    }
-
-    var right: Int {
-        points.max(of: \.x)!
-    }
-
     func moved(to direction: Point.Direction, _ steps: Int = 1) -> Shape {
         Shape(points: points.map { $0.moved(to: direction, steps: steps) }, height: height)
     }
@@ -108,15 +100,12 @@ final class Day17: AOCDay {
     func part2() -> Int {
         jetIndex = 0
         shapeIndex = 0
-        let rocks = 1_000_000_000_000 - 1
+        let rocks = 1_000_000_000_000
         var seen = [Key: (Int, Int)]()
 
-        var pc = 0
-
         var playfield = Playfield()
-        for block in 0..<Int.max {
+        for block in 1 ..< Int.max {
             playTetris(in: &playfield)
-            pc += 1
             let key = Key(skyline: playfield.skyline(), shapeIndex: shapeIndex, jetIndex: jetIndex)
             if let (start, height) = seen[key] {
                 let heightGain = playfield.accumulatedHeight - height
@@ -125,7 +114,6 @@ final class Day17: AOCDay {
                 let remainder = (rocks - start) - (loops * loopLen)
                 for _ in 0..<remainder {
                     playTetris(in: &playfield)
-                    pc += 1
                 }
 
                 // -1 loops because we've stopped at the end of the first
@@ -165,8 +153,7 @@ final class Day17: AOCDay {
 
     private func nextJet() -> Point.Direction {
         defer { jetIndex = (jetIndex + 1) % jets.count }
-        let ch = jets[jetIndex]
-        return ch == "<" ? .w : .e
+        return jets[jetIndex] == "<" ? .w : .e
     }
 
     private func nextShape() -> Shape {
