@@ -9,6 +9,7 @@
 
 import AoCTools
 import RegexBuilder
+import Algorithms
 
 private struct Valve {
     let id: String
@@ -54,7 +55,17 @@ final class Day16: AOCDay {
     }
 
     func part2() -> Int {
-        return 0
+        let distances = computeDistances()
+
+        let valves = Set(distances.keys.filter { $0 != "AA" })
+        var maxPressure = Int.min
+        for halfOfValves in valves.combinations(ofCount: distances.count / 2) {
+            let myPart = searchPaths(from: "AA", timeAllowed: 26, visited: Set(halfOfValves), distances: distances)
+            let elephant = searchPaths(from: "AA", timeAllowed: 26, visited: valves - Set(halfOfValves), distances: distances)
+            maxPressure = max(maxPressure, myPart + elephant)
+        }
+
+        return maxPressure
     }
 
     private func searchPaths(from valve: String,
@@ -69,7 +80,7 @@ final class Day16: AOCDay {
             .filter { valve, _ in !visited.contains(valve) }
             .filter { _, distance in timeTaken + distance + 1 < timeAllowed }
 
-        var maxFlow: Int?
+        var maxFlow = Int.min
         for (nextValve, distance) in next {
             let flow = searchPaths(from: nextValve,
                                    timeAllowed: timeAllowed,
@@ -78,14 +89,18 @@ final class Day16: AOCDay {
                                    timeTaken: timeTaken + distance + 1,
                                    totalFlow: totalFlow + ((timeAllowed - timeTaken - distance - 1) * valves[nextValve]!.flowRate)
             )
-            maxFlow = max(maxFlow ?? Int.min, flow)
+            maxFlow = max(maxFlow, flow)
         }
 
-        return maxFlow ?? totalFlow
+        return maxFlow != Int.min ? maxFlow : totalFlow
     }
 
     private func computeDistances() -> [String: [String: Int]] {
-        let result = valves.keys.map { valve in
+        let interestingValves = valves.values
+            .filter { $0.id == "AA" || $0.flowRate > 0 }
+            .map { $0.id }
+
+        let result = interestingValves.map { valve in
             var distances = [valve: 0]
             var queue = [valve]
             while !queue.isEmpty {
