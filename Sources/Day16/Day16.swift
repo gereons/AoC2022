@@ -3,11 +3,14 @@
 //
 // https://adventofcode.com/2022/day/16
 //
+// Partly based on
+// https://todd.ginsberg.com/post/advent-of-code/2022/day16/
+//
 
 import AoCTools
 import RegexBuilder
 
-private struct Valve: Equatable, Hashable {
+private struct Valve {
     let id: String
     let flowRate: Int
     let leadsTo: [String]
@@ -34,78 +37,51 @@ private struct Valve: Equatable, Hashable {
     }
 }
 
-private struct Step: Hashable {
-    let valve: Valve
-    let openedAt: Int
-}
-
 final class Day16: AOCDay {
     private let valves: [String: Valve]
-    private let maxOpen: Int
 
     init(rawInput: String? = nil) {
         let input = rawInput ?? Self.rawInput
 
         valves = input.lines.map { Valve($0) }.mapped(by: \.id)
-        maxOpen = valves.values.count { $0.flowRate > 0 }
     }
 
     func part1() -> Int {
-        let aa = valves["AA"]!
-        let results = openAllValves(startAt: aa)
-
-        var maxPressure = 0
-        for result in results {
-            var pressure = 0
-            for step in result {
-                pressure += step.valve.flowRate * (30 - step.openedAt)
-            }
-            maxPressure = max(maxPressure, pressure)
-        }
-
-        return maxPressure
-    }
-
-    private func openAllValves(startAt valve: Valve) -> [[Step]] {
-        var result = [[Step]]()
-        let remaining = valves.values.filter { $0.flowRate > 0 }
         let distances = computeDistances()
+        let pressure = searchPaths(from: "AA", timeAllowed: 30, distances: distances)
 
-        openRemainingValves(startAt: valve,
-                            minute: 1,
-                            remaining: Set(remaining),
-                            stepsSoFar: [],
-                            distances: distances,
-                            result: &result)
-        return result
-    }
-
-    private func openRemainingValves(startAt valve: Valve,
-                                     minute: Int,
-                                     remaining: Set<Valve>,
-                                     stepsSoFar: [Step],
-                                     distances: [String: [String: Int]],
-                                     result: inout [[Step]]
-    ) {
-        if remaining.isEmpty || minute >= 30 {
-            result.append(stepsSoFar)
-            return
-        }
-
-        for nextToOpen in remaining {
-            let distance = distances[valve.id]![nextToOpen.id]!
-            let step = Step(valve: nextToOpen, openedAt: minute + distance)
-            openRemainingValves(startAt: nextToOpen,
-                                minute: minute + distance + 1,
-                                remaining: remaining.subtracting([nextToOpen]),
-                                stepsSoFar: stepsSoFar + [step],
-                                distances: distances,
-                                result: &result)
-        }
+        return pressure
     }
 
     func part2() -> Int {
         return 0
+    }
+
+    private func searchPaths(from valve: String,
+                             timeAllowed: Int,
+                             visited: Set<String> = [],
+                             distances: [String: [String: Int]],
+                             timeTaken: Int = 0,
+                             totalFlow: Int = 0
+    ) -> Int {
+        let next = distances[valve]!
+            .map { ($0, $1) }
+            .filter { valve, _ in !visited.contains(valve) }
+            .filter { _, distance in timeTaken + distance + 1 < timeAllowed }
+
+        var maxFlow: Int?
+        for (nextValve, distance) in next {
+            let flow = searchPaths(from: nextValve,
+                                   timeAllowed: timeAllowed,
+                                   visited: visited + nextValve,
+                                   distances: distances,
+                                   timeTaken: timeTaken + distance + 1,
+                                   totalFlow: totalFlow + ((timeAllowed - timeTaken - distance - 1) * valves[nextValve]!.flowRate)
+            )
+            maxFlow = max(maxFlow ?? Int.min, flow)
+        }
+
+        return maxFlow ?? totalFlow
     }
 
     private func computeDistances() -> [String: [String: Int]] {
@@ -122,6 +98,7 @@ final class Day16: AOCDay {
                     }
                 }
             }
+            distances = distances.filter { valves[$0.key]!.flowRate > 0 }
             return (valve, distances)
         }
         return Dictionary(uniqueKeysWithValues: result)
