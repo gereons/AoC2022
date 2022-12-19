@@ -8,7 +8,7 @@ import Foundation
 @main
 struct AdventOfCode {
     // assign to eg `.day(5)`, leave as nil to run the puzzle for the current calendar day
-    static var defaultDay: Day? // = .day(1)
+    static var defaultDay: Day? = .day(16)
 
     static func main() {
         var day = defaultDay ?? today
@@ -29,8 +29,8 @@ struct AdventOfCode {
     static var today: Day {
         let components = Calendar.current.dateComponents([.day, .month], from: Date())
         let day = components.day!
-        if components.month == 12 {
-            return 1...25 ~= day ? .day(day) : .all
+        if components.month == 12 && 1...25 ~= day {
+            return .day(day)
         }
         return .all
     }

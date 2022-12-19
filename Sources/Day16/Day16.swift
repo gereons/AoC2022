@@ -7,7 +7,7 @@
 import AoCTools
 import RegexBuilder
 
-private struct Valve: Equatable {
+private struct Valve: Equatable, Hashable {
     let id: String
     let flowRate: Int
     let leadsTo: [String]
@@ -34,6 +34,11 @@ private struct Valve: Equatable {
     }
 }
 
+private struct Step: Hashable {
+    let valve: Valve
+    let openedAt: Int
+}
+
 final class Day16: AOCDay {
     private let valves: [String: Valve]
     private let maxOpen: Int
@@ -47,73 +52,78 @@ final class Day16: AOCDay {
 
     func part1() -> Int {
         let aa = valves["AA"]!
+        let results = openAllValves(startAt: aa)
 
-        return openValves(startAt: aa)
+        var maxPressure = 0
+        for result in results {
+            var pressure = 0
+            for step in result {
+                pressure += step.valve.flowRate * (30 - step.openedAt)
+            }
+            maxPressure = max(maxPressure, pressure)
+        }
+
+        return maxPressure
+    }
+
+    private func openAllValves(startAt valve: Valve) -> [[Step]] {
+        var result = [[Step]]()
+        let remaining = valves.values.filter { $0.flowRate > 0 }
+        let distances = computeDistances()
+
+        openRemainingValves(startAt: valve,
+                            minute: 1,
+                            remaining: Set(remaining),
+                            stepsSoFar: [],
+                            distances: distances,
+                            result: &result)
+        return result
+    }
+
+    private func openRemainingValves(startAt valve: Valve,
+                                     minute: Int,
+                                     remaining: Set<Valve>,
+                                     stepsSoFar: [Step],
+                                     distances: [String: [String: Int]],
+                                     result: inout [[Step]]
+    ) {
+        if remaining.isEmpty || minute >= 30 {
+            result.append(stepsSoFar)
+            return
+        }
+
+        for nextToOpen in remaining {
+            let distance = distances[valve.id]![nextToOpen.id]!
+            let step = Step(valve: nextToOpen, openedAt: minute + distance)
+            openRemainingValves(startAt: nextToOpen,
+                                minute: minute + distance + 1,
+                                remaining: remaining.subtracting([nextToOpen]),
+                                stepsSoFar: stepsSoFar + [step],
+                                distances: distances,
+                                result: &result)
+        }
     }
 
     func part2() -> Int {
         return 0
     }
 
-    private func openValves(startAt: Valve) -> Int {
-        var results = [[Open]]()
-
-        openValves(startAt: startAt, minute: 1, open: [], results: &results)
-
-        var maxPressure = Int.min
-        var maxResult = [Open]()
-        for result in results {
-            var pressure = 0
-            for op in result {
-                pressure += op.flowRate * (30 - op.minute)
+    private func computeDistances() -> [String: [String: Int]] {
+        let result = valves.keys.map { valve in
+            var distances = [valve: 0]
+            var queue = [valve]
+            while !queue.isEmpty {
+                let current = queue.removeFirst()
+                for next in valves[current]!.leadsTo {
+                    let newDistance = distances[current]! + 1
+                    if newDistance < distances[next, default: Int.max] {
+                        distances[next] = newDistance
+                        queue.append(next)
+                    }
+                }
             }
-            // maxPressure = max(maxPressure, pressure)
-            if pressure > maxPressure {
-                maxPressure = pressure
-                maxResult = result
-            }
+            return (valve, distances)
         }
-
-        return maxPressure
-    }
-
-    private struct Open: Hashable {
-        let valve: String
-        let flowRate: Int
-        let minute: Int
-    }
-
-    private struct State: Hashable {
-        let openValves: [Open]
-        let current: String
-        let next: String
-    }
-
-    private var seen = Set<State>()
-
-    private func openValves(startAt valve: Valve, minute: Int, open: [Open], results: inout [[Open]]) {
-        if minute > 30 || open.count == maxOpen {
-            results.append(open)
-            return
-        }
-
-        var open = open
-        var minute = minute
-        if valve.flowRate > 0 {
-            let isOpen = open.contains { $0.valve == valve.id }
-            if !isOpen {
-                minute += 1
-                open.append(Open(valve: valve.id, flowRate: valve.flowRate, minute: minute))
-            }
-        }
-
-        for goto in valve.leadsTo {
-            let target = valves[goto]!
-            let state = State(openValves: open, current: valve.id, next: target.id)
-            if !seen.contains(state) {
-                seen.insert(state)
-                openValves(startAt: target, minute: minute + 1, open: open, results: &results)
-            }
-        }
+        return Dictionary(uniqueKeysWithValues: result)
     }
 }
