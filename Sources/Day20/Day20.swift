@@ -73,8 +73,16 @@ final class Day20: AOCDay {
 
     private func rotate(_ circle: [Node]) {
         for node in circle {
-            for _ in 0 ..< abs(node.shift) {
-                if node.value < 0 {
+            var shift = abs(node.shift)
+            var value = node.value
+            // switch direction if it's shorter
+            if shift > circle.count / 2 {
+                shift = circle.count - shift - 1
+                value = -value
+            }
+
+            for _ in 0 ..< shift {
+                if value < 0 {
                     swap(node.previous!, node)
                 } else {
                     swap(node, node.next!)
