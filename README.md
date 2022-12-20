@@ -57,6 +57,7 @@ Use the included `input.sh` script to download your puzzle input. To be able to 
 | [Day 16](https://adventofcode.com/2022/day/16) | ⭐ | ⭐ |
 | [Day 17](https://adventofcode.com/2022/day/17) | ⭐ | ⭐ |
 | [Day 18](https://adventofcode.com/2022/day/18) | ⭐ | ⭐ |
+| [Day 20](https://adventofcode.com/2022/day/20) | ⭐ | ⭐ |
 <!--- advent_readme_stars table --->
 
 ### Time Log
