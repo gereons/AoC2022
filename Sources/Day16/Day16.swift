@@ -9,7 +9,6 @@
 
 import AoCTools
 import RegexBuilder
-import Algorithms
 
 private struct Valve {
     let id: String
@@ -59,7 +58,8 @@ final class Day16: AOCDay {
 
         let valves = Set(distances.keys.filter { $0 != "AA" })
         var maxPressure = Int.min
-        for halfOfValves in valves.combinations(ofCount: distances.count / 2) {
+        let halfSizedCombinations = valves.combinations().filter { $0.count == distances.count / 2 }
+        for halfOfValves in halfSizedCombinations {
             let myPart = searchPaths(from: "AA", timeAllowed: 26, visited: Set(halfOfValves), distances: distances)
             let elephant = searchPaths(from: "AA", timeAllowed: 26, visited: valves - Set(halfOfValves), distances: distances)
             maxPressure = max(maxPressure, myPart + elephant)

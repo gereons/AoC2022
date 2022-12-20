@@ -161,18 +161,3 @@ final class Day17: AOCDay {
         return shapes[shapeIndex]
     }
 }
-
-extension Point {
-    func line(to end: Point) -> [Point] {
-        let dx = (end.x - x).signum()
-        let dy = (end.y - y).signum()
-        let range = max(abs(x - end.x), abs(y - end.y))
-        return (0 ..< range).map { step in
-            Point(x + dx * step, y + dy * step)
-        }
-    }
-
-    func moved(to direction: Direction, steps: Int) -> Point {
-        self + direction.offset * steps
-    }
-}
