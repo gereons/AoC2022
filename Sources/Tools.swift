@@ -43,3 +43,9 @@ extension Array where Element: Hashable {
         Set(self)
     }
 }
+
+extension Array {
+    func adjacentPairs() -> [(Element, Element)] {
+        zip(self, self.dropFirst()).map { ($0, $1) }
+    }
+}
