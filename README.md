@@ -62,30 +62,3 @@ Use the included `input.sh` script to download your puzzle input. To be able to 
 | [Day 21](https://adventofcode.com/2022/day/21) | ⭐ |   |
 <!--- advent_readme_stars table --->
 
-### Time Log
-
-* Day1: 9m - 08:41 - 08:50
-* Day2: 21m - 08:05 - 08:26
-* Day3: 19m - 10:51 - 11:10
-* Day4: 15m - 11:20 - 11:35
-* Day5: 33m - 09:25 - 09:58
-* Day6: 9m - 08:48 - 08:57
-* Day7: 2:17h - 10:45 - 13:02  
-* Day8: 44m - 13:11 - 13:55
-* Day9: 57m - 08:55 - 09:29, 10:45 - 11:08
-* Day10: 43m - 12:25 - 13:18
-* Day11: 1:33h - 11:29 - 13:02
-* Day12: 19m - 11:34 - 11:53
-* Day13  
-* Day14  
-* Day15  
-* Day16  
-* Day17  
-* Day18  
-* Day19  
-* Day20  
-* Day21  
-* Day22  
-* Day23  
-* Day24  
-* Day25  
