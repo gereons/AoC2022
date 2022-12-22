@@ -2,15 +2,30 @@ import XCTest
 @testable import AdventOfCode
 
 final class Day22Tests: XCTestCase {
+    let input = """
+        ...#
+        .#..
+        #...
+        ....
+...#.......#
+........#...
+..#....#....
+..........#.
+        ...#....
+        .....#..
+        .#......
+        ......#.
+
+10R5L5R10L4R5L5
+"""
+    
     func testDay22_1() throws {
-        let day = Day22(rawInput: """
-""")
-        XCTAssertEqual(day.part1(), 0)
+        let day = Day22(rawInput: input, cubeSize: 4)
+        XCTAssertEqual(day.part1(), 6032)
     }
 
     func testDay22_2() throws {
-        let day = Day22(rawInput: """
-""")
-        XCTAssertEqual(day.part2(), 0)
+        let day = Day22(rawInput: input, cubeSize: 4)
+        XCTAssertEqual(day.part2(), 5031)
     }
 }
