@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gereons/AoCTools",
       "state" : {
-        "revision" : "b349821344741aa5577ec594e32ddcac83f9616e",
-        "version" : "0.0.36"
+        "revision" : "1dac02af9b007dd1ef93b5fe97caa9d9120a6797",
+        "version" : "0.0.37"
       }
     }
   ],

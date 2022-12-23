@@ -86,11 +86,7 @@ final class Day21: AOCDay {
             }
         }
 
-        guard let humn else {
-            return 0
-        }
-
-        return humn
+        return humn ?? 0
     }
 
     private func yell(of monkey: Monkey, _ humn: Decimal? = nil) -> Decimal {

@@ -25,8 +25,8 @@ final class Day08: AOCDay {
         for y in 1 ..< trees.count - 1 {
             for x in 1 ..< trees[0].count - 1 {
                 let height = trees[y][x]
-                var visible: [Point.Direction: Bool] = [.n: true, .w: true, .e: true, .s: true]
-                for direction in Point.Direction.orthogonal {
+                var visible: [Direction: Bool] = [.n: true, .w: true, .e: true, .s: true]
+                for direction in Direction.orthogonal {
                     var n = Point(x, y).moved(to: direction)
                     while 0...maxX ~= n.x && 0...maxY ~= n.y {
                         if trees[n.y][n.x] >= height {
@@ -54,8 +54,8 @@ final class Day08: AOCDay {
         for y in 1 ..< trees.count - 1 {
             for x in 1 ..< trees[0].count - 1 {
                 let height = trees[y][x]
-                var visible: [Point.Direction: Int] = [.n: 0, .w: 0, .e: 0, .s: 0]
-                for direction in Point.Direction.orthogonal {
+                var visible: [Direction: Int] = [.n: 0, .w: 0, .e: 0, .s: 0]
+                for direction in Direction.orthogonal {
                     var n = Point(x, y).moved(to: direction)
                     while 0...maxX ~= n.x && 0...maxY ~= n.y {
                         visible[direction]! += 1

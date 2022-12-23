@@ -116,7 +116,7 @@ final class Day22: AOCDay {
     func part1() -> Int {
         let start = Point(map.rowMinMax[0]!.min, 0)
 
-        var direction = Point.Direction.e
+        var direction = Direction.e
         var current = start
 
         for move in moves {
@@ -128,7 +128,8 @@ final class Day22: AOCDay {
                     case .floor:
                         current = next
                     case .wall:
-                        () // do nothing, we're stuck
+                        // do nothing, we're stuck
+                        break
                     case .none:
                         // check wraparound
                         let wrap: Point
@@ -156,7 +157,7 @@ final class Day22: AOCDay {
         }
 
         // Facing is 0 for right (>), 1 for down (v), 2 for left (<), and 3 for up (^).
-        let facing: [Point.Direction: Int] = [.e: 0, .s: 1, .w: 2, .n: 3]
+        let facing: [Direction: Int] = [.e: 0, .s: 1, .w: 2, .n: 3]
         return (current.y + 1) * 1000 + (current.x + 1) * 4 + facing[direction]!
     }
 

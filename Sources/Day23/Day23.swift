@@ -24,7 +24,7 @@ final class Day23: AOCDay {
 
     func part1() -> Int {
         var elves = initialElves
-        var checks: [[Point.Direction]] = [
+        var checks: [[Direction]] = [
             [.n, .nw, .ne],
             [.s, .sw, .se],
             [.w, .nw, .sw],
@@ -47,7 +47,7 @@ final class Day23: AOCDay {
 
     func part2() -> Int {
         var elves = initialElves
-        var checks: [[Point.Direction]] = [
+        var checks: [[Direction]] = [
             [.n, .nw, .ne],
             [.s, .sw, .se],
             [.w, .nw, .sw],
@@ -66,7 +66,7 @@ final class Day23: AOCDay {
         fatalError()
     }
 
-    private func move(_ elves: Set<Point>, _ checks: [[Point.Direction]]) -> Set<Point> {
+    private func move(_ elves: Set<Point>, _ checks: [[Direction]]) -> Set<Point> {
         var plannedMoves = [Point: [Point]]()
         var stay = Set<Point>()
         for elf in elves.sorted(by: <) {
@@ -91,16 +91,16 @@ final class Day23: AOCDay {
         return movedElves
     }
 
-    private func proposedMove(for elf: Point, elves: Set<Point>, _ checks: [[Point.Direction]]) -> Point? {
-        for check in checks {
-            if let move = checkIfNeighborsEmpty(point: elf, directions: check, elves: elves) {
+    private func proposedMove(for elf: Point, elves: Set<Point>, _ directions: [[Direction]]) -> Point? {
+        for dir in directions {
+            if let move = checkIfNeighborsEmpty(point: elf, directions: dir, elves: elves) {
                 return move
             }
         }
         return nil
     }
 
-    private func checkIfNeighborsEmpty(point: Point, directions: [Point.Direction], elves: Set<Point>) -> Point? {
+    private func checkIfNeighborsEmpty(point: Point, directions: [Direction], elves: Set<Point>) -> Point? {
         let allEmpty = directions.allSatisfy { !elves.contains(point.moved(to: $0)) }
         return allEmpty ? point.moved(to: directions[0]) : nil
     }

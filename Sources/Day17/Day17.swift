@@ -11,7 +11,7 @@ private struct Shape {
     let points: [Point]
     let height: Int
 
-    func moved(to direction: Point.Direction, _ steps: Int = 1) -> Shape {
+    func moved(to direction: Direction, _ steps: Int = 1) -> Shape {
         Shape(points: points.map { $0.moved(to: direction, steps: steps) }, height: height)
     }
 
@@ -151,7 +151,7 @@ final class Day17: AOCDay {
         playfield.add(shape)
     }
 
-    private func nextJet() -> Point.Direction {
+    private func nextJet() -> Direction {
         defer { jetIndex = (jetIndex + 1) % jets.count }
         return jets[jetIndex] == "<" ? .w : .e
     }

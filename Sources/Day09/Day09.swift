@@ -7,10 +7,10 @@
 import AoCTools
 
 private struct Motion {
-    let direction: Point.Direction
+    let direction: Direction
     let distance: Int
 
-    static let dirMap: [String: Point.Direction] = [
+    static let dirMap: [String: Direction] = [
         "U": .n, "L": .w, "R": .e, "D": .s
     ]
 

@@ -141,10 +141,10 @@ final class Day15: AOCDay {
         borders.reserveCapacity(totalRange * 4)
 
         for sensor in sensors {
-            let n = sensor.position + Point.Direction.n.offset * (sensor.range + 1)
-            let w = sensor.position + Point.Direction.w.offset * (sensor.range + 1)
-            let s = sensor.position + Point.Direction.s.offset * (sensor.range + 1)
-            let e = sensor.position + Point.Direction.e.offset * (sensor.range + 1)
+            let n = sensor.position + Direction.n.offset * (sensor.range + 1)
+            let w = sensor.position + Direction.w.offset * (sensor.range + 1)
+            let s = sensor.position + Direction.s.offset * (sensor.range + 1)
+            let e = sensor.position + Direction.e.offset * (sensor.range + 1)
             let corners = [n,w,s,e,n]
 
             for p in zip(corners, corners.dropFirst()) {
