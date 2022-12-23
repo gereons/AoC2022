@@ -3,7 +3,8 @@
 //
 // https://adventofcode.com/2022/day/22
 //
-
+// https://github.com/davearussell/advent2022/blob/master/day22/solve.py ??
+//
 import AoCTools
 import Foundation
 
@@ -85,54 +86,92 @@ private struct Map {
 
         return Map(points: points)
     }
+}
 
-    func face(for point: Point) -> Int {
-        assert(points[point] != nil)
-        if point.y < cubeSize {
-            return 1
-        }
-        if point.y < cubeSize * 2 {
-            return (point.x / cubeSize) + 2
-        }
-        return (point.x / cubeSize) + 3
-    }
+private struct CubeMap {
+    let segments: [Point: [Point: Tile]]
+    let faceSegment: [Face: Point]
+    let faceOffset: [Face: Int]
+    let start: Point
+    let cubeSize: Int
 
-    func normalize(_ point: Point) -> Point {
-        point - offset(for: point)
-    }
+    static func parse(_ lines: [String], cubeSize: Int) -> CubeMap {
+        var segments = [Point: [Point: Tile]]()
+        var start: Point?
 
-    // how far is the "origin" of each face from 0,0
-    func offset(for point: Point) -> Point {
-        offset(for: face(for: point))
-    }
+        for j in 0..<lines.count / cubeSize {
+            let jFactor = j * cubeSize
+            for i in 0..<lines[jFactor].count / cubeSize {
+                let iFactor = i * cubeSize
+                let segment = Point(i, j)
 
-    func offset(for face: Int) -> Point {
-        switch face {
-        case 1: return Point(2 * cubeSize, 0)
-        case 2: return Point(0, cubeSize)
-        case 3: return Point(cubeSize, cubeSize)
-        case 4: return Point(2 * cubeSize, cubeSize)
-        case 5: return Point(2 * cubeSize, 2 * cubeSize)
-        case 6: return Point(3 * cubeSize, 2 * cubeSize)
-        default: fatalError()
-        }
-    }
+                for y in 0 ..< cubeSize {
+                    let line = lines[jFactor + y]
+                    for (x, ch) in line[iFactor ..< iFactor + cubeSize].enumerated() {
+                        if let tile = Tile(rawValue: ch) {
+                            let point = Point(x, y)
+                            segments[segment, default: [:]][point] = tile
 
-    func draw() {
-        for y in minY ... maxY {
-            for x in minX ... maxX {
-                var ch: Character = " "
-                if let t = points[Point(x, y)] {
-                    ch = t.rawValue
+                            if start == nil {
+                                start = point
+                            }
+                        }
+                    }
                 }
-                print(ch, terminator: "")
             }
-            print()
         }
+
+        var faceSegment = [Face: Point]()
+        var faceOffset = [Face: Int]()
+
+        var queue = [QueueEntry]()
+        queue.append(QueueEntry(segment: segments.keys.first!, face: .front, fromDirection: .s, fromFace: .top))
+        var visited = Set<Point>()
+        visited.insert(segments.keys.first!)
+
+        while !queue.isEmpty {
+            let current = queue.removeFirst()
+            faceSegment[current.face] = current.segment
+            let relativeFrom = current.fromDirection.opposite
+            let offset = (4 + relativeFrom.facing - Face.neighbors[current.face]!.firstIndex(of: current.fromFace)!) % 4
+            faceOffset[current.face] = offset
+
+            for i in 0..<4 {
+                let direction = Direction(i)
+                let segment = Point(current.segment.x + direction.offset.x, current.segment.y + direction.offset.y)
+                if segments.keys.contains(segment) && !visited.contains(segment) {
+                    visited.insert(segment)
+                    let nextFace = Face.neighbors[current.face]![(4 + i - offset) % 4]
+                    queue.append(QueueEntry(segment: segment, face: nextFace, fromDirection: Direction(i), fromFace: current.face))
+                }
+            }
+        }
+
+        return CubeMap(segments: segments, faceSegment: faceSegment, faceOffset: faceOffset, start: start!, cubeSize: cubeSize)
+    }
+
+    private struct QueueEntry {
+        let segment: Point
+        let face: Face
+        let fromDirection: Direction
+        let fromFace: Face
     }
 }
 
-extension Direction {
+private enum Face {
+    case front, back, left, right, top, bottom
+
+    static let neighbors: [Face: [Face]] = [
+        .front: [ right, bottom, left, top ],
+        .back: [ left, bottom, right, top ],
+        .left: [ front, bottom, back, top ],
+        .right: [ back, bottom, front, top ],
+        .top: [right, front, left, back ],
+        .bottom: [ right, back, left, front ]
+    ]
+}
+
+fileprivate extension Direction {
     // Facing is 0 for right (>), 1 for down (v), 2 for left (<), and 3 for up (^).
     var facing: Int {
         switch self {
@@ -143,55 +182,70 @@ extension Direction {
         default: fatalError()
         }
     }
+
+    init(_ facing: Int) {
+        switch facing {
+        case 0: self = .e
+        case 1: self = .s
+        case 2: self = .w
+        case 3: self = .n
+        default: fatalError()
+        }
+    }
 }
 
 final class Day22: AOCDay {
     private let map: Map
+    private let cubeMap: CubeMap
     private let moves: [Move]
 
     init(rawInput: String? = nil) {
         let input = rawInput ?? Self.rawInput
         let blocks = input.lines.split(whereSeparator: \.isEmpty)
-        map = Map.parse(blocks[0].map { String($0) })
+        let mapLines = blocks[0].map { String($0) }
+        map = Map.parse(mapLines)
+        cubeMap = CubeMap.parse(mapLines, cubeSize: map.cubeSize)
         moves = Move.parse(blocks[1].first!)
     }
 
     func part1() -> Int {
         let start = Point(map.rowMinMax[0]!.min, 0)
-        print(map.face(for: start))
-        let (destination, direction) = walkOnMap(start: start, direction: .e, wrap: wrapOnFlatMap)
+        let (destination, direction) = walkOnMap(start: start, direction: .e)
 
         return (destination.y + 1) * 1000 + (destination.x + 1) * 4 + direction.facing
     }
 
     func part2() -> Int {
-        return 0
+        return walkOnCube(start: cubeMap.start, direction: .e, face: .front)
     }
 
-    private func walkOnMap(start: Point,
-                           direction: Direction,
-                           wrap: (Point, Direction) -> (Point, Direction)
-    ) -> (Point, Direction) {
-        var walkTo = start
+    private func walkOnMap(start: Point, direction: Direction) -> (Point, Direction) {
+        var current = start
         var direction = direction
 
         for move in moves {
             switch move {
             case .straight(let steps):
                 for _ in 0..<steps {
-                    let next = walkTo.moved(to: direction)
+                    let next = current.moved(to: direction)
                     switch map.points[next] {
                     case .floor:
-                        walkTo = next
+                        current = next
                     case .wall:
                         // do nothing, we're stuck
                         break
                     case .none:
                         // check wraparound
-                        let (wrap, newDirection) = wrap(walkTo, direction)
+                        let wrap: Point
+                        switch direction {
+                        case .n: wrap = Point(next.x, map.columnMinMax[next.x]!.max)
+                        case .s: wrap = Point(next.x, map.columnMinMax[next.x]!.min)
+                        case .w: wrap = Point(map.rowMinMax[next.y]!.max, next.y)
+                        case .e: wrap = Point(map.rowMinMax[next.y]!.min, next.y)
+                        default: fatalError()
+                        }
                         if map.points[wrap] == .floor {
-                            walkTo = wrap
-                            direction = newDirection
+                            current = wrap
                         } else {
                             break
                         }
@@ -203,77 +257,67 @@ final class Day22: AOCDay {
                 direction = direction.turned(.counterclockwise)
             }
         }
-        return (walkTo, direction)
+        return (current, direction)
     }
 
-    private func wrapOnFlatMap(point: Point, direction: Direction) -> (Point, Direction) {
-        let wrap: Point
-        switch direction {
-        case .n: wrap = Point(point.x, map.columnMinMax[point.x]!.max)
-        case .s: wrap = Point(point.x, map.columnMinMax[point.x]!.min)
-        case .w: wrap = Point(map.rowMinMax[point.y]!.max, point.y)
-        case .e: wrap = Point(map.rowMinMax[point.y]!.min, point.y)
-        default: fatalError()
-        }
-        return (wrap, direction)
-    }
+    // https://github.com/cheng93/AdventOfCode/blob/master/Solutions/2022/AdventOfCode2022/Day22/Day22Solver.cs
 
-    func wrapOnCube(point: Point, direction: Direction) -> (Point, Direction) {
-        let wrap: Point
+    private func walkOnCube(start: Point, direction: Direction, face: Face) -> Int {
+        var current = start
         var direction = direction
-        let cubeSize = map.cubeSize
-        let nPoint = map.normalize(point)
-        assert(0..<cubeSize ~= nPoint.x)
-        assert(0..<cubeSize ~= nPoint.y)
+        var face = face
 
-        switch (map.face(for: point), direction) {
-        case (1, .n): // to 2N, turn S
-            wrap = Point(cubeSize - 1 - nPoint.x, 0) + map.offset(for: 2)
-            assert(map.face(for: wrap) == 2)
-            direction = .s
-        case (2, .n): // to 1N, turn S
-            wrap = Point(cubeSize - 1 - nPoint.x, 0) + map.offset(for: 1)
-            assert(map.face(for: wrap) == 1)
-            direction = .s
+        for move in moves {
+            switch move {
+            case .straight(let steps):
+                for _ in 0..<steps {
+                    var newDirectionIndex = direction.facing
+                    var next = current.moved(to: direction)
+                    var newFace = face
+                    var valid = true
+                    if cubeMap.segments[cubeMap.faceSegment[face]!]![next] == nil {
+                        let directionIndex = direction.facing
+                        newFace = Face.neighbors[face]![(4 + directionIndex - cubeMap.faceOffset[face]!) % 4]
+                        next = current
+                        let relativeFrom = direction.opposite.facing
+                        let positionOffset = (4 + Face.neighbors[newFace]!.firstIndex(of: face)! - relativeFrom) % 4
+                        let offset = cubeMap.faceOffset[newFace]!
+                        let rotations = (positionOffset + offset) % 4
 
-        case (1, .w): // to 3N, turn S
-            wrap = Point(nPoint.y, nPoint.x) + map.offset(for: 3)
-            assert(map.face(for: wrap) == 3)
-            direction = .s
-        case (3, .n): // to 1W, turn E
-            wrap = Point(nPoint.y, nPoint.x) + map.offset(for: 1)
-            assert(map.face(for: wrap) == 1)
-            direction = .e
+                        for _ in 0 ..< rotations {
+                            newDirectionIndex += 1
+                            newDirectionIndex %= 4
+                            next = Point(cubeMap.cubeSize - 1 - next.y, next.x)
+                        }
 
+                        switch newDirectionIndex {
+                        case 0: next = Point(0, next.y)
+                        case 1: next = Point(next.x, 0)
+                        case 2: next = Point(cubeMap.cubeSize - 1, next.y)
+                        case 3: next = Point(next.x, cubeMap.cubeSize - 1)
+                        default: fatalError()
+                        }
 
-        case (1, .e): // to 6E, turn W
-            wrap = Point(nPoint.y, nPoint.x) + map.offset(for: 6)
-            assert(map.face(for: wrap) == 6)
-            direction = .w
-        case (6, .e): // to 1W, turn E
-            wrap = Point(nPoint.x, cubeSize - 1 - nPoint.y) + map.offset(for: 1)
-            assert(map.face(for: wrap) == 1)
-            direction = .e
-
-
-
-
-
-        case (2, .w): // to 6S, turn N XXX
-            assert(point.x == cubeSize)
-            wrap = Point(point.x + 3 * cubeSize, 3 * cubeSize - 1)
-            assert(map.face(for: wrap) == 6)
-            direction = .n
-        case (2, .s): // to 5S, turn N
-            wrap = Point(point.x + 2 * cubeSize, 3 * cubeSize - 1)
-            assert(map.face(for: wrap) == 5)
-            direction = .n
-
-        default:
-            fatalError()
+                        valid = cubeMap.segments[cubeMap.faceSegment[newFace]!]![next] == .floor
+                    }
+                    if !valid {
+                        break
+                    }
+                    current = next
+                    face = newFace
+                    direction = Direction(newDirectionIndex)
+                }
+            case .right:
+                direction = direction.turned(.clockwise)
+            case .left:
+                direction = direction.turned(.counterclockwise)
+            }
         }
 
-        assert(map.points[wrap] != nil)
-        return (wrap, direction)
+        let segment = cubeMap.faceSegment[face]!
+        let column = segment.x * cubeMap.cubeSize + current.x + 1
+        let row = segment.y * cubeMap.cubeSize + current.y + 1
+
+        return 1000 * row + 4 * column + direction.facing
     }
 }
