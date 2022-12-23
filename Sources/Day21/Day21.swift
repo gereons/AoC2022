@@ -103,7 +103,6 @@ final class Day21: AOCDay {
         case .op(let var1, let op, let var2):
             let v1 = yell(of: monkeys[var1]!, humn)
             let v2 = yell(of: monkeys[var2]!, humn)
-            print(v1, v2)
             switch op {
             case "+": return v1 + v2
             case "-": return v1 - v2
