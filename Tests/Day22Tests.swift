@@ -20,12 +20,12 @@ final class Day22Tests: XCTestCase {
 """
     
     func testDay22_1() throws {
-        let day = Day22(rawInput: input, cubeSize: 4)
+        let day = Day22(rawInput: input)
         XCTAssertEqual(day.part1(), 6032)
     }
 
     func testDay22_2() throws {
-        let day = Day22(rawInput: input, cubeSize: 4)
+        let day = Day22(rawInput: input)
         XCTAssertEqual(day.part2(), 5031)
     }
 }
