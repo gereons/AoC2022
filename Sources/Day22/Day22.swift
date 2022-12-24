@@ -3,8 +3,11 @@
 //
 // https://adventofcode.com/2022/day/22
 //
-// https://github.com/davearussell/advent2022/blob/master/day22/solve.py ??
+// for part 2 I gave up after failing to figure out the cube mappings and ported
+// https://github.com/cheng93/AdventOfCode/blob/master/Solutions/2022/AdventOfCode2022/Day22/Day22Solver.cs
+// to swift
 //
+
 import AoCTools
 import Foundation
 
@@ -125,9 +128,11 @@ private struct CubeMap {
         var faceOffset = [Face: Int]()
 
         var queue = [QueueEntry]()
-        queue.append(QueueEntry(segment: segments.keys.first!, face: .front, fromDirection: .s, fromFace: .top))
         var visited = Set<Point>()
-        visited.insert(segments.keys.first!)
+
+        let startSegment = segments.keys.sorted().first!
+        queue.append(QueueEntry(segment: startSegment, face: .front, fromDirection: .s, fromFace: .top))
+        visited.insert(startSegment)
 
         while !queue.isEmpty {
             let current = queue.removeFirst()
@@ -136,13 +141,13 @@ private struct CubeMap {
             let offset = (4 + relativeFrom.facing - Face.neighbors[current.face]!.firstIndex(of: current.fromFace)!) % 4
             faceOffset[current.face] = offset
 
-            for i in 0..<4 {
-                let direction = Direction(i)
+            for direction in [Direction.e, .s, .w, .n] {
+                // let direction = Direction(i)
                 let segment = Point(current.segment.x + direction.offset.x, current.segment.y + direction.offset.y)
                 if segments.keys.contains(segment) && !visited.contains(segment) {
                     visited.insert(segment)
-                    let nextFace = Face.neighbors[current.face]![(4 + i - offset) % 4]
-                    queue.append(QueueEntry(segment: segment, face: nextFace, fromDirection: Direction(i), fromFace: current.face))
+                    let nextFace = Face.neighbors[current.face]![(4 + direction.facing - offset) % 4]
+                    queue.append(QueueEntry(segment: segment, face: nextFace, fromDirection: direction, fromFace: current.face))
                 }
             }
         }
@@ -179,16 +184,6 @@ fileprivate extension Direction {
         case .s: return 1
         case .w: return 2
         case .n: return 3
-        default: fatalError()
-        }
-    }
-
-    init(_ facing: Int) {
-        switch facing {
-        case 0: self = .e
-        case 1: self = .s
-        case 2: self = .w
-        case 3: self = .n
         default: fatalError()
         }
     }
@@ -260,8 +255,6 @@ final class Day22: AOCDay {
         return (current, direction)
     }
 
-    // https://github.com/cheng93/AdventOfCode/blob/master/Solutions/2022/AdventOfCode2022/Day22/Day22Solver.cs
-
     private func walkOnCube(start: Point, direction: Direction, face: Face) -> Int {
         var current = start
         var direction = direction
@@ -271,10 +264,13 @@ final class Day22: AOCDay {
             switch move {
             case .straight(let steps):
                 for _ in 0..<steps {
-                    var newDirectionIndex = direction.facing
+                    var newDirection = direction
                     var next = current.moved(to: direction)
                     var newFace = face
                     var valid = true
+                    if cubeMap.segments[cubeMap.faceSegment[face]!]![next] == .wall {
+                        break
+                    }
                     if cubeMap.segments[cubeMap.faceSegment[face]!]![next] == nil {
                         let directionIndex = direction.facing
                         newFace = Face.neighbors[face]![(4 + directionIndex - cubeMap.faceOffset[face]!) % 4]
@@ -285,27 +281,28 @@ final class Day22: AOCDay {
                         let rotations = (positionOffset + offset) % 4
 
                         for _ in 0 ..< rotations {
-                            newDirectionIndex += 1
-                            newDirectionIndex %= 4
+                            newDirection = newDirection.turned(.clockwise)
                             next = Point(cubeMap.cubeSize - 1 - next.y, next.x)
                         }
 
-                        switch newDirectionIndex {
-                        case 0: next = Point(0, next.y)
-                        case 1: next = Point(next.x, 0)
-                        case 2: next = Point(cubeMap.cubeSize - 1, next.y)
-                        case 3: next = Point(next.x, cubeMap.cubeSize - 1)
+                        switch newDirection {
+                        case .e: next = Point(0, next.y)
+                        case .s: next = Point(next.x, 0)
+                        case .w: next = Point(cubeMap.cubeSize - 1, next.y)
+                        case .n: next = Point(next.x, cubeMap.cubeSize - 1)
                         default: fatalError()
                         }
 
-                        valid = cubeMap.segments[cubeMap.faceSegment[newFace]!]![next] == .floor
+                        let tile = cubeMap.segments[cubeMap.faceSegment[newFace]!]![next]
+                        assert(tile != nil)
+                        valid = tile  == .floor
                     }
                     if !valid {
                         break
                     }
                     current = next
                     face = newFace
-                    direction = Direction(newDirectionIndex)
+                    direction = newDirection
                 }
             case .right:
                 direction = direction.turned(.clockwise)
