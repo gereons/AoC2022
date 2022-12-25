@@ -63,5 +63,6 @@ Use the included `input.sh` script to download your puzzle input. To be able to 
 | [Day 22](https://adventofcode.com/2022/day/22) | ⭐ | ⭐ |
 | [Day 23](https://adventofcode.com/2022/day/23) | ⭐ | ⭐ |
 | [Day 24](https://adventofcode.com/2022/day/24) | ⭐ | ⭐ |
+| [Day 25](https://adventofcode.com/2022/day/25) | ⭐ | ⭐ |
 <!--- advent_readme_stars table --->
 
