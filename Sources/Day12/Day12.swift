@@ -47,7 +47,9 @@ final class Day12: AOCDay {
 
     func part2() -> Int {
         let pathfinder = AStarPathfinder(map: heightMap)
-        let starts = heightMap.map.filter { $0.value == 97 }.map { $0.key }
+        let starts = heightMap.map
+            .filter { $0.value == 97 }.map { $0.key }
+            .filter { $0.neighbors().count { heightMap.map[$0] == 98 } > 0 }
 
         var shortest = Int.max
         for start in starts {
