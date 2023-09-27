@@ -3,7 +3,7 @@ import XCTest
 
 final class Day12Tests: XCTestCase {
     func testDay12_1() throws {
-        let day = Day12(rawInput: """
+        let day = Day12(input: """
 Sabqponm
 abcryxxl
 accszExk
@@ -14,7 +14,7 @@ abdefghi
     }
 
     func testDay12_2() throws {
-        let day = Day12(rawInput: """
+        let day = Day12(input: """
 Sabqponm
 abcryxxl
 accszExk

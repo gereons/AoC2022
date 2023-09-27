@@ -81,12 +81,12 @@ final class Day15: AOCDay {
     private let row: Int
     private let size: Int
 
-    convenience init(rawInput: String? = nil) {
-        self.init(rawInput: rawInput, row: 2000000, size: 4000000)
+    convenience init(input: String? = nil) {
+        self.init(input: input, row: 2000000, size: 4000000)
     }
 
-    init(rawInput: String? = nil, row: Int, size: Int) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil, row: Int, size: Int) {
+        let input = input ?? Self.input
 
         self.row = row
         self.size = size

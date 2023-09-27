@@ -3,7 +3,7 @@ import XCTest
 
 final class Day02Tests: XCTestCase {
     func testDay02_1() throws {
-        let day = Day02(rawInput: """
+        let day = Day02(input: """
 A Y
 B X
 C Z
@@ -12,7 +12,7 @@ C Z
     }
 
     func testDay02_2() throws {
-        let day = Day02(rawInput: """
+        let day = Day02(input: """
 A Y
 B X
 C Z

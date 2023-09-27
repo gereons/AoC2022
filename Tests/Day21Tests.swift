@@ -21,12 +21,12 @@ hmdt: 32
 """
 
     func testDay21_1() throws {
-        let day = Day21(rawInput: input)
+        let day = Day21(input: input)
         XCTAssertEqual(day.part1(), 152)
     }
 
     func testDay21_2() throws {
-        let day = Day21(rawInput: input)
+        let day = Day21(input: input)
         XCTAssertEqual(day.part2(), 301)
     }
 }

@@ -3,7 +3,7 @@ import XCTest
 
 final class Day05Tests: XCTestCase {
     func testDay05_1() throws {
-        let day = Day05(rawInput: """
+        let day = Day05(input: """
     [D]
 [N] [C]
 [Z] [M] [P]
@@ -18,7 +18,7 @@ move 1 from 1 to 2
     }
 
     func testDay05_2() throws {
-        let day = Day05(rawInput: """
+        let day = Day05(input: """
     [D]
 [N] [C]
 [Z] [M] [P]

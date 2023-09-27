@@ -10,8 +10,8 @@ import RegexBuilder
 final class Day04: AOCDay {
     let assignments: [(Set<Int>, Set<Int>)]
 
-    init(rawInput: String? = nil) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil) {
+        let input = input ?? Self.input
 
         let r1start = Reference(Int.self)
         let r1end = Reference(Int.self)

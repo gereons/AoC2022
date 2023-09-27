@@ -152,12 +152,12 @@ noop
 """
 
     func testDay10_1() throws {
-        let day = Day10(rawInput: input)
+        let day = Day10(input: input)
         XCTAssertEqual(day.part1(), 13140)
     }
 
     func testDay10_2() throws {
-        let day = Day10(rawInput: input)
+        let day = Day10(input: input)
         let expectData = [
             "",
             "##..##..##..##..##..##..##..##..##..##..",

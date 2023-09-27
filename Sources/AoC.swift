@@ -8,7 +8,7 @@ import Foundation
 @main
 struct AdventOfCode {
     // assign to eg `.day(5)`, leave as nil to run the puzzle for the current calendar day
-    static var defaultDay: Day? // = .day(1)
+    static var defaultDay: Day? = .day(21)
 
     static func main() {
         var day = defaultDay ?? today
@@ -39,10 +39,10 @@ struct AdventOfCode {
         switch day {
         case .all:
             days.forEach { day in
-                day.init(rawInput: nil).run()
+                day.init(input: nil).run()
             }
         case .day(let day):
-            days[day-1].init(rawInput: nil).run()
+            days[day-1].init(input: nil).run()
         }
     }
 

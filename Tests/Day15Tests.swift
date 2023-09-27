@@ -20,12 +20,12 @@ Sensor at x=20, y=1: closest beacon is at x=15, y=3
 """
 
     func testDay15_1() throws {
-        let day = Day15(rawInput: input, row: 10, size: 20)
+        let day = Day15(input: input, row: 10, size: 20)
         XCTAssertEqual(day.part1(), 26)
     }
 
     func testDay15_2() throws {
-        let day = Day15(rawInput: input, row: 10, size: 20)
+        let day = Day15(input: input, row: 10, size: 20)
         XCTAssertEqual(day.part2(), 56000011)
     }
 }

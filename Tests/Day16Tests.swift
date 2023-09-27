@@ -16,12 +16,12 @@ Valve JJ has flow rate=21; tunnel leads to valve II
 """
 
     func testDay16_1() throws {
-        let day = Day16(rawInput: input)
+        let day = Day16(input: input)
         XCTAssertEqual(day.part1(), 1651)
     }
 
     func testDay16_2() throws {
-        let day = Day16(rawInput: input)
+        let day = Day16(input: input)
         XCTAssertEqual(day.part2(), 1707)
     }
 }

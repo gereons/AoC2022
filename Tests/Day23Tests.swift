@@ -26,17 +26,17 @@ final class Day23Tests: XCTestCase {
         ..............
         """
     func testDay23_1_small() throws {
-        let day = Day23(rawInput: smallInput)
+        let day = Day23(input: smallInput)
         XCTAssertEqual(day.part1(), 25)
     }
 
     func testDay23_1() throws {
-        let day = Day23(rawInput: input)
+        let day = Day23(input: input)
         XCTAssertEqual(day.part1(), 110)
     }
 
     func testDay23_2() throws {
-        let day = Day23(rawInput: input)
+        let day = Day23(input: input)
         XCTAssertEqual(day.part2(), 20)
     }
 }

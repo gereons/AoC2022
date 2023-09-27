@@ -19,7 +19,7 @@ final class Day25Tests: XCTestCase {
         """
 
     func testDay25_1() throws {
-        let day = Day25(rawInput: input)
+        let day = Day25(input: input)
         XCTAssertEqual(day.part1(), "2=-1=0")
     }
 }

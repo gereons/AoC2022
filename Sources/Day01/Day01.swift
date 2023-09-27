@@ -9,8 +9,8 @@ import AoCTools
 final class Day01: AOCDay {
     let calories: [[Int]]
 
-    init(rawInput: String? = nil) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil) {
+        let input = input ?? Self.input
 
         let sections = input.components(separatedBy: "\n\n")
         self.calories = sections.map {

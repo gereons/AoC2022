@@ -105,8 +105,8 @@ final class Day24: AOCDay {
     private let valley: Valley
 
 
-    init(rawInput: String? = nil) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil) {
+        let input = input ?? Self.input
 
         valley = Valley(input)
     }

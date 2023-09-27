@@ -24,8 +24,8 @@ private struct Motion {
 final class Day09: AOCDay {
     private let motions: [Motion]
 
-    init(rawInput: String? = nil) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil) {
+        let input = input ?? Self.input
         motions = input.lines.map { Motion($0) }
     }
 

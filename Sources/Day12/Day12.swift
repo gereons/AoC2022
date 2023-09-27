@@ -15,8 +15,8 @@ private struct HeightMap {
 final class Day12: AOCDay {
     private let heightMap: HeightMap
 
-    init(rawInput: String? = nil) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil) {
+        let input = input ?? Self.input
 
         var start = Point.zero
         var destination = Point.zero

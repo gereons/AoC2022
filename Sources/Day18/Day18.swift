@@ -38,8 +38,8 @@ private class Cube {
 final class Day18: AOCDay {
     let droplet: [Point3]
 
-    init(rawInput: String? = nil) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil) {
+        let input = input ?? Self.input
         droplet = input.lines.map { line in
             let parts = line.components(separatedBy: ",")
             return Point3(Int(parts[0])!, Int(parts[1])!, Int(parts[2])!)

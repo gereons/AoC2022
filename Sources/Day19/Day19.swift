@@ -160,8 +160,8 @@ private struct Factory {
 final class Day19: AOCDay {
     private let blueprints: [(Int, [Robot])]
 
-    init(rawInput: String? = nil) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil) {
+        let input = input ?? Self.input
 
         blueprints = input.lines.map(Self.parse)
     }

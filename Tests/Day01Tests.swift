@@ -3,7 +3,7 @@ import XCTest
 
 final class Day01Tests: XCTestCase {
     func testDay01_1() throws {
-        let day = Day01(rawInput: """
+        let day = Day01(input: """
 1000
 2000
 3000
@@ -23,7 +23,7 @@ final class Day01Tests: XCTestCase {
     }
 
     func testDay01_2() throws {
-        let day = Day01(rawInput: """
+        let day = Day01(input: """
 1000
 2000
 3000

@@ -52,8 +52,8 @@ final class Day02: AOCDay {
 
     private let rounds: [Hands]
 
-    init(rawInput: String? = nil) {
-        let input = rawInput ?? Self.rawInput
+    init(input: String? = nil) {
+        let input = input ?? Self.input
 
         rounds = input.lines.map { line in
             let parts = line.components(separatedBy: " ")

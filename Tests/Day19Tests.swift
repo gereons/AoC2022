@@ -8,12 +8,12 @@ Blueprint 2: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsid
 """
 
     func testDay19_1() throws {
-        let day = Day19(rawInput: input)
+        let day = Day19(input: input)
         XCTAssertEqual(day.part1(), 33)
     }
 
     func testDay19_2() throws {
-        let day = Day19(rawInput: input)
+        let day = Day19(input: input)
         XCTAssertEqual(day.part2(), 3472)
     }
 }

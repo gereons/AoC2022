@@ -29,12 +29,12 @@ $ ls
 """
 
     func testDay07_1() throws {
-        let day = Day07(rawInput: input)
+        let day = Day07(input: input)
         XCTAssertEqual(day.part1(), 95437)
     }
 
     func testDay07_2() throws {
-        let day = Day07(rawInput: input)
+        let day = Day07(input: input)
         XCTAssertEqual(day.part2(), 24933642)
     }
 }
