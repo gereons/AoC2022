@@ -68,10 +68,12 @@ final class Day02: AOCDay {
     }
 
     func part2() -> Int {
-        rounds.reduce(0) {
+        let result = rounds.reduce(0) {
             let mine = choose($1)
             return $0 + mine.score + fight((opponent: $1.opponent, mine: mine))
         }
+        print(result)
+        return result
     }
 
     private func fight(_ hands: Hands) -> Int {
