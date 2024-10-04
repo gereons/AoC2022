@@ -1,6 +1,7 @@
 import XCTest
 @testable import AdventOfCode
 
+@MainActor
 final class Day15Tests: XCTestCase {
     let input = """
 Sensor at x=2, y=18: closest beacon is at x=-2, y=15

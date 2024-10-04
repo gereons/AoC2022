@@ -5,7 +5,7 @@
 //
 
 import AoCTools
-import RegexBuilder
+@preconcurrency import RegexBuilder
 
 private struct Sensor {
     let position: Point
@@ -17,7 +17,7 @@ private struct Sensor {
         ZeroOrMore(.digit)
     } transform: { Int($0)! }
 
-    static let regex = Regex {
+    nonisolated(unsafe) static let regex = Regex {
         "Sensor at x="
         number
         ", y="
@@ -81,13 +81,11 @@ final class Day15: AOCDay {
     private let row: Int
     private let size: Int
 
-    convenience init(input: String? = nil) {
+    convenience init(input: String) {
         self.init(input: input, row: 2000000, size: 4000000)
     }
 
-    init(input: String? = nil, row: Int, size: Int) {
-        let input = input ?? Self.input
-
+    init(input: String, row: Int, size: Int) {
         self.row = row
         self.size = size
         self.sensors = input.lines.map { Sensor($0) }

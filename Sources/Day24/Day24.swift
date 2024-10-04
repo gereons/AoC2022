@@ -104,10 +104,7 @@ private struct Valley {
 final class Day24: AOCDay {
     private let valley: Valley
 
-
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         valley = Valley(input)
     }
 

@@ -65,9 +65,7 @@ private class Monkey {
 final class Day11: AOCDay {
     private let monkeys: [Monkey]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         monkeys = input.lines.split(whereSeparator: \.isEmpty).map { Monkey(Array($0)) }
     }
 

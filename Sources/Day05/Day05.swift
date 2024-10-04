@@ -24,9 +24,7 @@ final class Day05: AOCDay {
     private let crates: [Int: [Character]]
     private let moves: [Move]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         let parts = input.lines.split(whereSeparator: \.isEmpty)
 
         var crates = [Int: [Character]]()

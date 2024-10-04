@@ -81,8 +81,7 @@ final class Day17: AOCDay {
     private let shapes: [Shape] = [ .dash, .plus, .ell, .beam, .block ]
     private var shapeIndex = 0
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
+    init(input: String) {
         jets = Array(input)
     }
 

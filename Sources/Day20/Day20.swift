@@ -21,8 +21,7 @@ private class Node {
 final class Day20: AOCDay {
     private let coordinates: [Int]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
+    init(input: String) {
         coordinates = input.lines.map { Int($0)! }
     }
 

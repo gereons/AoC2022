@@ -9,8 +9,7 @@ import AoCTools
 final class Day23: AOCDay {
     private let initialElves: Set<Point>
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
+    init(input: String) {
         var elves = Set<Point>()
         for (y, line) in input.lines.enumerated() {
             for (x, ch) in line.enumerated() {

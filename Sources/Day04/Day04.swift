@@ -10,9 +10,7 @@ import RegexBuilder
 final class Day04: AOCDay {
     let assignments: [(Set<Int>, Set<Int>)]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         let r1start = Reference(Int.self)
         let r1end = Reference(Int.self)
         let r2start = Reference(Int.self)

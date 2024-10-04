@@ -10,9 +10,7 @@ final class Day08: AOCDay {
 
     let trees: [[Int]]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         trees = input.lines.map { line in
             line.map { Int(String($0))! }
         }

@@ -145,9 +145,7 @@ final class Day21: AOCDay {
     private let monkeys: Set<Monkey>
     private let root: Monkey
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         let allMonkeys = input.lines.map { Monkey.make($0) }.mapped(by: \.name)
         for monkey in allMonkeys.values.compactMap({ $0 as? CalcMonkey }) {
             monkey.left = allMonkeys[monkey.leftName]!

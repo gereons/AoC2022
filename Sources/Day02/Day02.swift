@@ -52,9 +52,7 @@ final class Day02: AOCDay {
 
     private let rounds: [Hands]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         rounds = input.lines.map { line in
             let parts = line.components(separatedBy: " ")
             return (opponent: Shape(parts[0]), mine: Shape(parts[1]))

@@ -194,8 +194,7 @@ final class Day22: AOCDay {
     private let cubeMap: CubeMap
     private let moves: [Move]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
+    init(input: String) {
         let blocks = input.lines.split(whereSeparator: \.isEmpty)
         let mapLines = blocks[0].map { String($0) }
         map = Map.parse(mapLines)

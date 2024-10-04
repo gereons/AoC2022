@@ -66,9 +66,7 @@ final class Day07: AOCDay {
     private let lines: [Line]
     private var totals: [Directory: Int]?
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         lines = input.lines.map { Line($0) }
     }
 

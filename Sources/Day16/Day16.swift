@@ -40,9 +40,7 @@ private struct Valve {
 final class Day16: AOCDay {
     private let valves: [String: Valve]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         valves = input.lines.map { Valve($0) }.mapped(by: \.id)
     }
 

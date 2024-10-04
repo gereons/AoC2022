@@ -9,9 +9,7 @@ import AoCTools
 final class Day01: AOCDay {
     let calories: [[Int]]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         let sections = input.components(separatedBy: "\n\n")
         self.calories = sections.map {
             $0.lines.map { Int($0)! }

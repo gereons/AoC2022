@@ -15,9 +15,7 @@ private enum Unit: Character, Drawable {
 final class Day14: AOCDay {
     private let cave: [Point: Unit]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         var cave = [Point: Unit]()
         for line in input.lines {
             let parts = line.components(separatedBy: " -> ")

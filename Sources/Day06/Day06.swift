@@ -9,8 +9,7 @@ import AoCTools
 final class Day06: AOCDay {
     let chars: [Character]
     
-    init(input: String? = nil) {
-        let input = input ?? Self.input
+    init(input: String) {
         chars = Array(input)
     }
 

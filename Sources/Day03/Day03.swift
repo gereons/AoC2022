@@ -5,12 +5,12 @@
 //
 
 import AoCTools
+import Algorithms
 
 final class Day03: AOCDay {
     let rucksacks: [String]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
+    init(input: String) {
         rucksacks = input.lines
     }
 
@@ -29,7 +29,7 @@ final class Day03: AOCDay {
 
     func part2() -> Int {
         var prio = 0
-        for group in rucksacks.chunked(3) {
+        for group in rucksacks.chunks(ofCount: 3) {
             let sets = group.map { Set($0.map { $0 }) }
             let common = sets[0].intersection(sets[1]).intersection(sets[2])
             prio += priority(for: common.first!)

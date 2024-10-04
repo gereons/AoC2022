@@ -64,9 +64,7 @@ extension Data: Comparable {
 final class Day13: AOCDay {
     private let packets: [Pair<Data, Data>]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
-
+    init(input: String) {
         var packets = [Pair<Data, Data>]()
         let decoder = JSONDecoder()
         for lines in input.lines.split(whereSeparator: \.isEmpty) {

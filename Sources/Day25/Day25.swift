@@ -13,8 +13,7 @@ final class Day25: AOCDay {
     let toDigit: [Character: Int] = [ "2": 2, "1": 1, "0": 0, "-": -1, "=": -2 ]
     let fromDigit: [Int: String] =  [ 2: "2", 1: "1", 0: "0", -1: "-", -2: "=" ]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
+    init(input: String) {
         snafus = input.lines
     }
 

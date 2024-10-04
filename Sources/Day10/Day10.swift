@@ -72,8 +72,7 @@ private class CPU {
 final class Day10: AOCDay {
     private let program: [Instruction]
 
-    init(input: String? = nil) {
-        let input = input ?? Self.input
+    init(input: String) {
         program = input.lines.flatMap { Instruction.decode($0) }
     }
 

@@ -1,6 +1,7 @@
 import XCTest
 @testable import AdventOfCode
 
+@MainActor
 final class Day16Tests: XCTestCase {
     let input = """
 Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
