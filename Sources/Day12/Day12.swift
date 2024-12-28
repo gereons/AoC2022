@@ -61,7 +61,7 @@ final class Day12: AOCDay {
 }
 
 extension HeightMap: Pathfinding {
-    func neighbors(for point: Point) -> [Point] {
+    func neighbors(of point: Point) -> [Point] {
         let height = map[point]! + 1
         return point
             .neighbors()

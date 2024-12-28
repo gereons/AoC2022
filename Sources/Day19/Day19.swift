@@ -163,7 +163,7 @@ final class Day19: AOCDay {
     init(input: String) {
         blueprints = input.lines.map { line in
             // Blueprint 1: Each ore robot costs 4 ore. Each clay robot costs 2 ore. Each obsidian robot costs 3 ore and 14 clay. Each geode robot costs 2 ore and 7 obsidian.
-            let ints = line.allInts()
+            let ints = line.integers()
             let ore = Robot(collects: .ore, costs: [(ints[1], .ore)])
             let clay = Robot(collects: .clay, costs: [(ints[2], .ore)])
             let obsidian = Robot(collects: .obsidian, costs: [(ints[3], .ore), (ints[4], .clay)])
@@ -190,15 +190,5 @@ final class Day19: AOCDay {
             product *= geodes
         }
         return product
-    }
-
-    private static func parse(_ line: String) -> (Int, [Robot]) {
-        // Blueprint 1: Each ore robot costs 4 ore. Each clay robot costs 2 ore. Each obsidian robot costs 3 ore and 14 clay. Each geode robot costs 2 ore and 7 obsidian.
-        let ints = line.allInts()
-        let ore = Robot(collects: .ore, costs: [(ints[1], .ore)])
-        let clay = Robot(collects: .clay, costs: [(ints[2], .ore)])
-        let obsidian = Robot(collects: .obsidian, costs: [(ints[3], .ore), (ints[4], .clay)])
-        let geode = Robot(collects: .geode, costs: [(ints[5], .ore), (ints[6], .obsidian)])
-        return (ints[0], [ore, clay, obsidian, geode])
     }
 }

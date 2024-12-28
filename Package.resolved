@@ -1,13 +1,13 @@
 {
-  "originHash" : "8a186e5d929d87dcbc3db3877e5a8d77523eb08adec8bd976da3be432c3c3fd8",
+  "originHash" : "4ef78625219360c889c6b376540b4deb811392d2920d58e334423fc8e956d4bd",
   "pins" : [
     {
       "identity" : "aoctools",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/gereons/AoCTools",
       "state" : {
-        "revision" : "d7971984089e4724cee928895176db6e81939491",
-        "version" : "0.1.0"
+        "revision" : "d363eb88c324269a870d3fe233dd622c04ba3e60",
+        "version" : "0.1.6"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/lukepistrol/SwiftLintPlugin",
       "state" : {
-        "revision" : "bea71d23db993c58934ee704f798a66d7b8cb626",
-        "version" : "0.57.0"
+        "revision" : "87454f5c9ff4d644086aec2a0df1ffba678e7f3c",
+        "version" : "0.57.1"
       }
     }
   ],

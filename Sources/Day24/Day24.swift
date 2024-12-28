@@ -143,7 +143,7 @@ private struct PathNode: Hashable {
 extension Valley: Pathfinding {
     typealias Coordinate = PathNode
 
-    func neighbors(for node: PathNode) -> [PathNode] {
+    func neighbors(of node: PathNode) -> [PathNode] {
         let moved = blizzardStates[(node.time + 1) % blizzardStates.count]
         let targets = node.point.neighbors() + [node.point] // move or stay
         let neighbors = targets
