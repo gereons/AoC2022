@@ -1,7 +1,6 @@
 import XCTest
 @testable import AdventOfCode
 
-@MainActor
 final class Day14Tests: XCTestCase {
     func testDay14_1() throws {
         let day = Day14(input: """

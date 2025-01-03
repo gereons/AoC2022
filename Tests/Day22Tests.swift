@@ -2,7 +2,6 @@ import XCTest
 import AoCTools
 @testable import AdventOfCode
 
-@MainActor
 final class Day22Tests: XCTestCase {
     let input = """
         ...#
