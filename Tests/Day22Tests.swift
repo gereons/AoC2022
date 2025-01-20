@@ -1,8 +1,8 @@
-import XCTest
+import Testing
 import AoCTools
 @testable import AdventOfCode
 
-final class Day22Tests: XCTestCase {
+@Suite struct Day22Tests {
     let input = """
         ...#
         .#..
@@ -20,15 +20,25 @@ final class Day22Tests: XCTestCase {
 10R5L5R10L4R5L5
 """
 
-    func testDay22_1() throws {
+    @Test func testDay22_part1() throws {
         let day = Day22(input: input)
-        XCTAssertEqual(day.part1(), 6032)
+        #expect(day.part1() == 6032)
     }
 
 
-    func testDay22_2() throws {
+    @Test func testDay22_part2() throws {
         let day = Day22(input: input)
         let result = day.part2()
-        XCTAssertEqual(result, 5031)
+        #expect(result == 5031)
+    }
+
+    @Test func testDay22_part1_solution() {
+        let day = Day22(input: Day22.input)
+        #expect(day.part1() == 97356)
+    }
+
+    @Test func testDay22_part2_solution() {
+        let day = Day22(input: Day22.input)
+        #expect(day.part2() == 120175)
     }
 }

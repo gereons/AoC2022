@@ -1,8 +1,8 @@
-import XCTest
+import Testing
 @testable import AdventOfCode
 
-final class Day01Tests: XCTestCase {
-    func testDay01_1() throws {
+@Suite struct Day01Tests {
+    @Test func testDay01_part1() throws {
         let day = Day01(input: """
 1000
 2000
@@ -19,10 +19,10 @@ final class Day01Tests: XCTestCase {
 
 10000
 """)
-        XCTAssertEqual(day.part1(), 24000)
+        #expect(day.part1() == 24000)
     }
 
-    func testDay01_2() throws {
+    @Test func testDay01_part2() throws {
         let day = Day01(input: """
 1000
 2000
@@ -39,6 +39,16 @@ final class Day01Tests: XCTestCase {
 
 10000
 """)
-        XCTAssertEqual(day.part2(), 45000)
+        #expect(day.part2() == 45000)
+    }
+
+    @Test func testDay01_part1_solution() {
+        let day = Day01(input: Day01.input)
+        #expect(day.part1() == 69912)
+    }
+
+    @Test func testDay01_part2_solution() {
+        let day = Day01(input: Day01.input)
+        #expect(day.part2() == 208180)
     }
 }

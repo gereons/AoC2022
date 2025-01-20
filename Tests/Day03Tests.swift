@@ -1,8 +1,8 @@
-import XCTest
+import Testing
 @testable import AdventOfCode
 
-final class Day03Tests: XCTestCase {
-    func testDay03_1() throws {
+@Suite struct Day03Tests {
+    @Test func testDay03_part1() throws {
         let day = Day03(input: """
 vJrwpWtwJgWrhcsFMMfFFhFp
 jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
@@ -11,10 +11,10 @@ wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
 """)
-        XCTAssertEqual(day.part1(), 157)
+        #expect(day.part1() == 157)
     }
 
-    func testDay03_2() throws {
+    @Test func testDay03_part2() throws {
         let day = Day03(input: """
 vJrwpWtwJgWrhcsFMMfFFhFp
 jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
@@ -23,6 +23,16 @@ wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
 """)
-        XCTAssertEqual(day.part2(), 70)
+        #expect(day.part2() == 70)
+    }
+
+    @Test func testDay03_part1_solution() {
+        let day = Day03(input: Day03.input)
+        #expect(day.part1() == 8123)
+    }
+
+    @Test func testDay03_part2_solution() {
+        let day = Day03(input: Day03.input)
+        #expect(day.part2() == 2620)
     }
 }

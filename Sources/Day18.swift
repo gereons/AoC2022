@@ -5,6 +5,7 @@
 //
 
 import AoCTools
+import Collections
 
 private class Cube {
     enum Contents {
@@ -76,13 +77,19 @@ final class Day18: AdventOfCodeDay {
     }
 
     private func floodFill(_ cube: Cube, from start: Point3) {
-        cube.points[start] = .water
+        var queue: Deque<Point3> = [start]
 
-        let neighbors = start.neighbors()
-            .filter { cube.contains($0) && cube.points[$0] == nil }
-        
-        for n in neighbors {
-            floodFill(cube, from: n)
+        while let p = queue.popFirst() {
+            if cube.points[p] == .water {
+                continue
+            }
+
+            cube.points[p] = .water
+            
+            let neighbors = p.neighbors()
+                .filter { cube.contains($0) && cube.points[$0] == nil }
+            
+            queue.append(contentsOf: neighbors)
         }
     }
 }

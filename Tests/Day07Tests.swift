@@ -1,7 +1,7 @@
-import XCTest
+import Testing
 @testable import AdventOfCode
 
-final class Day07Tests: XCTestCase {
+@Suite struct Day07Tests {
     let input = """
 $ cd /
 $ ls
@@ -28,13 +28,23 @@ $ ls
 7214296 k
 """
 
-    func testDay07_1() throws {
+    @Test func testDay07_part1() throws {
         let day = Day07(input: input)
-        XCTAssertEqual(day.part1(), 95437)
+        #expect(day.part1() == 95437)
     }
 
-    func testDay07_2() throws {
+    @Test func testDay07_part2() throws {
         let day = Day07(input: input)
-        XCTAssertEqual(day.part2(), 24933642)
+        #expect(day.part2() == 24933642)
+    }
+
+    @Test func testDay07_part1_solution() {
+        let day = Day07(input: Day07.input)
+        #expect(day.part1() == 1367870)
+    }
+
+    @Test func testDay07_part2_solution() {
+        let day = Day07(input: Day07.input)
+        #expect(day.part2() == 549173)
     }
 }

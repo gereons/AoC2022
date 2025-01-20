@@ -1,7 +1,7 @@
-import XCTest
+import Testing
 @testable import AdventOfCode
 
-final class Day10Tests: XCTestCase {
+@Suite struct Day10Tests {
     let input = """
 addx 15
 addx -11
@@ -151,15 +151,14 @@ noop
 noop
 """
 
-    func testDay10_1() throws {
+    @Test func testDay10_part1() throws {
         let day = Day10(input: input)
-        XCTAssertEqual(day.part1(), 13140)
+        #expect(day.part1() == 13140)
     }
 
-    func testDay10_2() throws {
+    @Test func testDay10_part2() throws {
         let day = Day10(input: input)
         let expectData = [
-            "",
             "##..##..##..##..##..##..##..##..##..##..",
             "###...###...###...###...###...###...###.",
             "####....####....####....####....####....",
@@ -172,6 +171,25 @@ noop
             .replacingOccurrences(of: ".", with: "⬜️")
             .replacingOccurrences(of: "#", with: "⬛️")
 
-        XCTAssertEqual(day.part2(), expect)
+        #expect(day.part2() == expect)
+    }
+
+    @Test func testDay10_part1_solution() {
+        let day = Day10(input: Day10.input)
+        #expect(day.part1() == 14060)
+    }
+
+    @Test func testDay10_part2_solution() {
+        let expected = """
+⬛️⬛️⬛️⬜️⬜️⬜️⬛️⬛️⬜️⬜️⬛️⬛️⬛️⬜️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬛️⬛️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬛️⬛️⬛️⬜️⬜️⬜️⬛️⬛️⬜️
+⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬛️⬜️
+⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬛️⬜️⬜️⬜️⬛️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️⬜️⬛️⬛️⬛️⬜️⬜️⬜️⬜️⬜️⬛️⬜️
+⬛️⬛️⬛️⬜️⬜️⬛️⬛️⬛️⬛️⬜️⬛️⬛️⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬜️⬜️⬜️⬜️⬜️⬜️⬛️⬜️
+⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬜️⬛️⬜️
+⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬜️⬜️⬜️⬜️⬛️⬜️⬜️⬛️⬜️⬛️⬛️⬛️⬛️⬜️⬜️⬛️⬛️⬜️⬜️
+"""
+
+        let day = Day10(input: Day10.input)
+        #expect(day.part2() == expected)
     }
 }

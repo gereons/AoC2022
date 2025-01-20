@@ -1,7 +1,7 @@
-import XCTest
+import Testing
 @testable import AdventOfCode
 
-final class Day25Tests: XCTestCase {
+@Suite struct Day25Tests {
     let input = """
         1=-0-2
         12111
@@ -18,8 +18,13 @@ final class Day25Tests: XCTestCase {
         122
         """
 
-    func testDay25_1() throws {
+    @Test func testDay25_part1() throws {
         let day = Day25(input: input)
-        XCTAssertEqual(day.part1(), "2=-1=0")
+        #expect(day.part1() == "2=-1=0")
+    }
+
+    @Test func testDay25_part1_solution() {
+        let day = Day25(input: Day25.input)
+        #expect(day.part1() == "122-2=200-0111--=200")
     }
 }

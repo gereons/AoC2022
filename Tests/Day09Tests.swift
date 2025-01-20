@@ -1,9 +1,9 @@
-import XCTest
+import Testing
 @testable import AdventOfCode
 
-final class Day09Tests: XCTestCase {
-    func testDay09_1() throws {
-        let day = Day09(input: """
+@Suite struct Day09Tests {
+    @Test func testDay09_part1() throws {
+        var day = Day09(input: """
 R 4
 U 4
 L 3
@@ -13,11 +13,9 @@ D 1
 L 5
 R 2
 """)
-        XCTAssertEqual(day.part1(), 13)
-    }
+        #expect(day.part1() == 13)
 
-    func testDay09_2a() throws {
-        let day = Day09(input: """
+        day = Day09(input: """
 R 4
 U 4
 L 3
@@ -27,11 +25,9 @@ D 1
 L 5
 R 2
 """)
-        XCTAssertEqual(day.part2(), 1)
-    }
+        #expect(day.part2() == 1)
 
-    func testDay09_2b() throws {
-        let day = Day09(input: """
+        day = Day09(input: """
 R 5
 U 8
 L 8
@@ -41,6 +37,16 @@ D 10
 L 25
 U 20
 """)
-        XCTAssertEqual(day.part2(), 36)
+        #expect(day.part2() == 36)
+    }
+
+    @Test func testDay09_part1_solution() {
+        let day = Day09(input: Day09.input)
+        #expect(day.part1() == 6284)
+    }
+
+    @Test func testDay09_part2_solution() {
+        let day = Day09(input: Day09.input)
+        #expect(day.part2() == 2661)
     }
 }

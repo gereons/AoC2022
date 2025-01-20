@@ -6,7 +6,7 @@
 
 import AoCTools
 
-private class Node {
+private final class Node {
     let value: Int
     let shift: Int
     var next: Node?

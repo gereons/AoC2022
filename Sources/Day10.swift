@@ -88,6 +88,6 @@ final class Day10: AdventOfCodeDay {
         let cpu = CPU(program: program)
         let crt = cpu.render()
         // "PAPKFKEJ"
-        return "\n" + crt
+        return crt
     }
 }

@@ -1,7 +1,7 @@
-import XCTest
+import Testing
 @testable import AdventOfCode
 
-final class Day16Tests: XCTestCase {
+@Suite struct Day16Tests {
     let input = """
 Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
 Valve BB has flow rate=13; tunnels lead to valves CC, AA
@@ -15,13 +15,23 @@ Valve II has flow rate=0; tunnels lead to valves AA, JJ
 Valve JJ has flow rate=21; tunnel leads to valve II
 """
 
-    func testDay16_1() throws {
+    @Test func testDay16_part1() throws {
         let day = Day16(input: input)
-        XCTAssertEqual(day.part1(), 1651)
+        #expect(day.part1() == 1651)
     }
 
-    func testDay16_2() throws {
+    @Test func testDay16_part2() throws {
         let day = Day16(input: input)
-        XCTAssertEqual(day.part2(), 1707)
+        #expect(day.part2() == 1707)
+    }
+
+    @Test func testDay16_part1_solution() {
+        let day = Day16(input: Day16.input)
+        #expect(day.part1() == 1915)
+    }
+
+    @Test func testDay16_part2_solution() {
+        let day = Day16(input: Day16.input)
+        #expect(day.part2() == 2772)
     }
 }

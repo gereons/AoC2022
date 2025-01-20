@@ -1,15 +1,15 @@
-import XCTest
+import Testing
 @testable import AdventOfCode
 
-final class Day11Tests: XCTestCase {
-    func testDay11_1() throws {
+@Suite struct Day11Tests {
+    @Test func testDay11_part1() throws {
         let day = Day11(input: input)
-        XCTAssertEqual(day.part1(), 10605)
+        #expect(day.part1() == 10605)
     }
 
-    func testDay11_2() throws {
+    @Test func testDay11_part2() throws {
         let day = Day11(input: input)
-        XCTAssertEqual(day.part2(), 2713310158)
+        #expect(day.part2() == 2713310158)
     }
 
     let input = """
@@ -41,4 +41,14 @@ Monkey 3:
     If true: throw to monkey 0
     If false: throw to monkey 1
 """
+
+    @Test func testDay11_part1_solution() {
+        let day = Day11(input: Day11.input)
+        #expect(day.part1() == 57838)
+    }
+
+    @Test func testDay11_part2_solution() {
+        let day = Day11(input: Day11.input)
+        #expect(day.part2() == 15050382231)
+    }
 }
