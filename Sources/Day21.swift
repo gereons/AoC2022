@@ -6,7 +6,7 @@
 
 import AoCTools
 
-private class Monkey {
+private class Monkey: @unchecked Sendable {
     let name: String
 
     init(name: String) {
@@ -46,9 +46,9 @@ extension Monkey: Hashable {
     }
 }
 
-final private class FailMonkey: Monkey { }
+final private class FailMonkey: Monkey, @unchecked Sendable { }
 
-final private class ConstantMonkey: Monkey {
+final private class ConstantMonkey: Monkey, @unchecked Sendable {
     let constant: Int
 
     init(name: String, constant: Int) {
@@ -69,7 +69,7 @@ final private class ConstantMonkey: Monkey {
     }
 }
 
-final private class CalcMonkey: Monkey {
+final private class CalcMonkey: Monkey, @unchecked Sendable {
     let leftName: String
     let rightName: String
     let op: String

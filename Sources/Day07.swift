@@ -62,7 +62,7 @@ private struct Directory: Hashable, CustomStringConvertible {
     }
 }
 
-final class Day07: AdventOfCodeDay {
+final class Day07: AdventOfCodeDay, @unchecked Sendable {
     let title = "No Space Left On Device"
     
     private let lines: [Line]

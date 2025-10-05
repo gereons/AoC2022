@@ -20,7 +20,7 @@ private enum Operation {
     }
 }
 
-private class Monkey {
+private final class Monkey: Sendable {
     let id: Int
     let items: [Int]
     let operation: Operation

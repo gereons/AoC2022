@@ -74,7 +74,7 @@ private struct Key: Hashable {
     let jetIndex: Int
 }
 
-final class Day17: AdventOfCodeDay {
+final class Day17: AdventOfCodeDay, @unchecked Sendable {
     let title = "Pyroclastic Flow"
     
     let jets: [Character]

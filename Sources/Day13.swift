@@ -61,6 +61,8 @@ extension Data: Comparable {
     }
 }
 
+extension Pair: @retroactive @unchecked Sendable where T: Sendable, U: Sendable {}
+
 final class Day13: AdventOfCodeDay {
     let title = "Distress Signal"
     
