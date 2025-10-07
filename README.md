@@ -1,3 +1,5 @@
+# this repo has moved to https://codeberg.org/gereon/AoC2022
+
 # Advent Of Code 2022
 
 My [AoC 2022](https://adventofcode.com/2022) Solutions in Swift
